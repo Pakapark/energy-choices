@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import SplitPane from 'react-split-pane';
 import ContinueButton from './Components/ContinueButton';
 import Container from './Components/Container';
 import ProgressBarContainer from './Components/ProgressBarContainer';
@@ -30,7 +29,8 @@ class Main extends Component {
           </div>
           <HorizontalLine />
           <div style={styles.homepage.subtitleContainer}>
-            Learn how to save our planet and your wallet
+            An explorable explanation of how to be<br/>
+            an energy ninja
           </div>
         <ContinueButton href="#unit-introduction" />
       </Container>
@@ -61,7 +61,7 @@ class Main extends Component {
       if (this.state.zipcode.length > 4) {
         return (
           <div>
-            <div style={styles.universal.mediumFont}>Did you know that</div>
+            <div style={styles.universal.mediumFont}>Did You Know That</div>
             <div style={styles.universal.smallFont}>On average, a single family house in your area uses energy</div>
             <div style={styles.universal.largeFont}>80K <img src={Image.lightbulb.medium} /> per month</div>
             <ContinueButton href="#section1Utility" narration="Click Continue To Learn More About Your House" />
@@ -77,7 +77,7 @@ class Main extends Component {
         </div>
         <HorizontalLine section />
         <div style={styles.universal.mediumFont}>
-          Please Fill in Your Zip Code for a personalized experience
+          Please Fill in Your Zip Code For a Personalized Experience
         </div>
         <div style={styles.section1Introduction.zipCodeInputContainer}>
           <input
@@ -223,7 +223,7 @@ const styles = {
       fontFamily: Metric.font.family.headline,
       fontSize: Metric.font.size.headline,
       color: Color.headline,
-      paddingTop: "20%" // Bad Style
+      paddingTop: "15%" // Bad Style
     },
     subtitleContainer: {
       fontSize: Metric.font.size.large,
