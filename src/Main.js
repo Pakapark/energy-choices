@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Slider from 'react-rangeslider';
 import ContinueButton from './Components/ContinueButton';
+import ShareButton from './Components/ShareButton';
 import Container from './Components/Container';
 import ProgressBarContainer from './Components/ProgressBarContainer';
 import HorizontalLine from './Components/HorizontalLine';
@@ -49,10 +50,35 @@ class Main extends Component {
           An explorable explanation of how to be<br/>
           an energy ninja
         </div>
-        <ContinueButton href="#unit-introduction" />
+        <ContinueButton href="#question-introduction" />
       </Container>
     )
   }
+
+  renderQuestionIntroduction() {
+    return (
+      <Container section="question-introduction">
+        <div style={styles.motivatingQuestion.headerContainer}>
+          What if we could save energy and the environment?
+        </div>
+        <HorizontalLine />
+        <div style={styles.motivatingQuestion.descriptionContainer}>
+          <p>
+            We often think there’s a <span style={styles.motivatingQuestion.boldContainer}>tradeoff </span> 
+            between what’s good for the Earth and good for our wallets. After all, buying a Tesla or installing 
+            solar panels seems pretty expensive. And no one wants to crank the thermostat up to 80 degrees in the summer 
+            just to save a bit of electricity.
+          </p>
+          <p>
+            But there are lots of choices that make both 
+            <span style={styles.motivatingQuestion.boldContainer}> economic</span> and 
+            <span style={styles.motivatingQuestion.boldContainer}> environmental</span> sense.
+          </p>
+        </div>
+        <ContinueButton href="#unit-introduction" />
+      </Container>
+    )
+  }  
 
   renderUnitIntroduction() {
     return (
@@ -209,10 +235,38 @@ class Main extends Component {
     );
   }
 
+  renderConclusion() {
+    return (
+      <Container section="lastPage">
+        <div style={styles.motivatingQuestion.headerContainer}>
+          What if we could save energy and the environment?
+        </div>
+        <HorizontalLine />
+        <div style={styles.motivatingQuestion.subtitleContainer}>
+          We can! You can.
+        </div>
+        <div style={styles.motivatingQuestion.descriptionContainer}>
+          What’s good for the Earth can also be good for our wallets. You can save<br/>
+          money by making choices in your home that also help keep the<br/>
+          environment pure. The ideas here are only the beginning.
+        </div>
+        <div style={styles.motivatingQuestion.shareContainer}>
+          Share your choice to save
+        </div>
+        <span>
+          <ShareButton src={Image.share.facebook} href="https://facebook.com"/>
+          <ShareButton src={Image.share.twitter} href="https://twitter.com"/>
+          <ShareButton src={Image.share.email} href="https://www.google.com/gmail/"/>
+        </span>
+      </Container>
+    )
+  }
+
   render() {
     return (
       <div style={{height: "100%"}}>
         {this.renderHomePage()}
+        {this.renderQuestionIntroduction()}
         {this.renderUnitIntroduction()}
         {this.renderSection1Introduction()}
         {this.renderSection1Utility()}
@@ -221,6 +275,7 @@ class Main extends Component {
         {this.renderSection1Summary()}
         {this.renderSection2Introduction()}
         {this.renderSection3Introduction()}
+        {this.renderConclusion()}
       </div>
     );
   }
@@ -285,6 +340,28 @@ const styles = {
     normalTextContainer: {
       margin: "50px 0"
     },
+  },
+
+  motivatingQuestion: {
+    headerContainer: {
+      fontSize: Metric.font.size.extraLarge,
+      fontWeight: Metric.font.weight.bold
+    },
+    subtitleContainer: {
+      fontSize: Metric.font.size.large,
+      fontWeight: Metric.font.weight.medium,
+    },
+    descriptionContainer: {
+      fontSize: Metric.font.size.medium
+    },
+    boldContainer: {
+      fontWeight: Metric.font.weight.bold
+    },
+    shareContainer: {
+      fontSize: Metric.font.size.large,
+      fontWeight: Metric.font.weight.medium,
+      margin: "50px 0 0 0"
+    }
   },
 
   section1Introduction: {

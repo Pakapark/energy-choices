@@ -28,6 +28,10 @@ const Metric = {
   continueButtonContainer: {
     margin: "40px auto"
   },
+  shareButton: {
+    width: "120px",
+    margin: "0 20px 0 20px"
+  },
   horizontalLine: {
     height: "5px",
     border: "0",
