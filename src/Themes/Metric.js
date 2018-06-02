@@ -26,7 +26,7 @@ const Metric = {
     margin: "20px auto"
   },
   continueButtonContainer: {
-    margin: "80px auto"
+    margin: "40px auto"
   },
   horizontalLine: {
     height: "5px",

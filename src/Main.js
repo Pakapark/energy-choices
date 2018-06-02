@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Slider from 'react-rangeslider';
 import ContinueButton from './Components/ContinueButton';
 import Container from './Components/Container';
 import ProgressBarContainer from './Components/ProgressBarContainer';
@@ -11,10 +12,26 @@ class Main extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      zipcode: ""
+      zipcode: "",
+      lightbulb: {
+        quantity: 0
+      }
     };
 
     this.zipcodeOnChange = this.zipcodeOnChange.bind(this);
+  }
+
+  renderUtility(utility) {
+    return (
+      <div style={styles.section1Utility.utilityContainer}>
+        <div style={styles.section1Utility.utilityHeader}>{utility}</div>
+        <div>
+          <span style={styles.section1Utility.utilityFactor}>Quantity</span>
+          <span><input style={styles.section1Utility.inputRange} type="range" min="0" max="100" value={this.state.lightbulb.quantity} onChange={(e)=>this.setState({lightbulb: {quantity: e.target.value}})} /></span>
+          <span>{this.state.lightbulb.quantity}</span>
+        </div>
+      </div>
+    );
   }
 
   zipcodeOnChange(event) {
@@ -24,14 +41,14 @@ class Main extends Component {
   renderHomePage() {
     return (
       <Container section="home">
-          <div style={styles.homepage.headerContainer}>
-            Energy Choices
-          </div>
-          <HorizontalLine />
-          <div style={styles.homepage.subtitleContainer}>
-            An explorable explanation of how to be<br/>
-            an energy ninja
-          </div>
+        <div style={styles.homepage.headerContainer}>
+          Energy Choices
+        </div>
+        <HorizontalLine />
+        <div style={styles.homepage.subtitleContainer}>
+          An explorable explanation of how to be<br/>
+          an energy ninja
+        </div>
         <ContinueButton href="#unit-introduction" />
       </Container>
     )
@@ -64,7 +81,7 @@ class Main extends Component {
             <div style={styles.universal.mediumFont}>Did You Know That</div>
             <div style={styles.universal.smallFont}>On average, a single family house in your area uses energy</div>
             <div style={styles.universal.largeFont}>80K <img src={Image.lightbulb.medium} /> per month</div>
-            <ContinueButton href="#section1Utility" narration="Click Continue To Learn More About Your House" />
+            <ContinueButton href="#section1Utility" narration="Click 'Continue' To Learn More About Your House" />
           </div>
         )
       }
@@ -101,8 +118,27 @@ class Main extends Component {
           Section 1: My House
         </div>
         <HorizontalLine section />
-        Utility
-        <ContinueButton href="#section1CompareResult" />
+        <div style={styles.universal.smallFont}>Please Select Your Daily Energy Usage</div>
+        <div style={styles.section1Utility.utilityRow}>
+          {this.renderUtility("Lightbulb")}
+          {this.renderUtility("Lightbulb")}
+        </div>
+        <div style={styles.section1Utility.utilityRow}>
+          {this.renderUtility("Lightbulb")}
+          {this.renderUtility("Lightbulb")}
+        </div>
+        <div style={styles.section1Utility.utilityRow}>
+          {this.renderUtility("Lightbulb")}
+          {this.renderUtility("Lightbulb")}
+        </div>
+        <div style={styles.section1Utility.utilityRow}>
+          {this.renderUtility("Lightbulb")}
+          {this.renderUtility("Lightbulb")}
+        </div>
+        <div style={styles.section1Utility.totalEnergy}>
+          Your Estimated Total Monthly Energy Usage = XX.XXX <img src={Image.lightbulb.small} />
+        </div>
+        <ContinueButton href="#section1CompareResult" narration="Click 'Continue' To Compare Your Result With Your Neighbour "/>
       </ProgressBarContainer>
     );
   }
@@ -267,6 +303,42 @@ const styles = {
       fontSize: Metric.font.size.large,
       border: "0",
       borderBottom: "2px solid " + Color.normalText
+    }
+  },
+
+  section1Utility: {
+    utilityRow: {
+      width: "100%",
+      height: "100px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-around",
+      margin: "20px 0"
+    },
+    utilityContainer: {
+      width: "45%",
+      height: "100px",
+      backgroundColor: Color.sand,
+      padding: "5px 10px",
+      textAlign: "left"
+    },
+    totalEnergy: {
+      fontSize: Metric.font.size.medium,
+      fontWeight: Metric.font.weight.bold,
+      margin: "20px 0"
+    },
+    utilityHeader: {
+      fontSize: Metric.font.size.medium,
+      fontWeight: Metric.font.weight.medium
+    },
+    utilityFactor: {
+      fontSize: Metric.font.size.small,
+      fontWeight: Metric.font.weight.light
+    },
+    inputRange: {
+      width: "200px",
+      height: "5px",
+      margin: "0 5px"
     }
   }
 }
