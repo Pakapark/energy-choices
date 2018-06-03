@@ -883,7 +883,7 @@ class Main extends Component {
             </tr>
             <tr style={styles.universal.mediumFont}>
               <td style={{paddingBottom: "10px", textAlign: "left", paddingLeft: "50px"}}>Total Energy</td>
-              <td style={{paddingBottom: "10px"}}>{this.state.totalHouseEnergy} <img alt=""src={Image.lightbulb.small} /></td>
+              <td style={{paddingBottom: "10px"}}>{this.state.totalHouseEnergy} <img alt=""src={Image.lightbulb.medium} /></td>
               <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.TOTAL}&nbsp;<img alt=""src={Image.lightbulb.medium} /></td>
               <td
                 style={{
@@ -1187,6 +1187,7 @@ class Main extends Component {
           <a
             style={styles.section3Choices.checkboxText}
             href="https://news.energysage.com/compare-solar-panel-prices-california/"
+            target="_blank"
           >
             Install solar panels
           </a>
@@ -1199,7 +1200,13 @@ class Main extends Component {
             src={this.state.upgradeApplianceCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
             onClick={() => {this.setState({upgradeApplianceCheckbox: !this.state.upgradeApplianceCheckbox});}}
           />
-          <a style={styles.section3Choices.checkboxText} href="https://www.energyupgradeca.org/home-energy-efficiency/appliances/">Upgrade my appliances</a>
+          <a
+            style={styles.section3Choices.checkboxText}
+            href="https://www.energyupgradeca.org/home-energy-efficiency/appliances/"
+            target="_blank"
+          >
+            Upgrade my appliances
+          </a>
         </div>
           <div style={styles.section3Choices.checkboxContainer}>
           <img
@@ -1208,7 +1215,13 @@ class Main extends Component {
             src={this.state.energySavingTipsCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
             onClick={() => {this.setState({energySavingTipsCheckbox: !this.state.energySavingTipsCheckbox});}}
           />
-            <a style={styles.section3Choices.checkboxText} href="https://www.energyupgradeca.org/home-energy-efficiency/upgrading-your-home/">Follow energy saving tips</a>
+          <a
+            style={styles.section3Choices.checkboxText}
+            href="https://www.energyupgradeca.org/home-energy-efficiency/upgrading-your-home/"
+            target="_blank"
+          >
+            Follow energy saving tips
+          </a>
           </div>
           <div style={styles.section3Choices.checkboxContainer}>
           <img
@@ -1217,7 +1230,13 @@ class Main extends Component {
             src={this.state.publicTransitCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
             onClick={() => {this.setState({publicTransitCheckbox: !this.state.publicTransitCheckbox});}}
           />
-            <a style={styles.section3Choices.checkboxText} href="http://www.iliveinthebayarea.com/knowledge-center/transit/">Take more public transit</a>
+          <a
+            style={styles.section3Choices.checkboxText}
+            href="http://www.iliveinthebayarea.com/knowledge-center/transit/"
+            target="_blank"
+          >
+            Take more public transit
+          </a>
           </div>
         <ContinueButton href="#lastPage" />
       </ProgressBarContainer>
