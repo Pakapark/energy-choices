@@ -29,8 +29,6 @@ import Image from '../Themes/Image';
 class ProgressBarContainer extends Component {
   render() {
 
-    var sidebarContent = <b>Sidebar content</b>;
-
     return (
       <div
         id={this.props.section}
@@ -43,7 +41,7 @@ class ProgressBarContainer extends Component {
         className="row"
       >
         <span className="col-sm-2" style={styles.progressBarContainer}>
-          <img src={Image.progressBar[this.props.progress]} />
+          <img src={Image.progressBar[this.props.progress]} alt=""/>
         </span>
         <span className="col-sm-10" style={styles.contentContainer}>
           {this.props.children}
