@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import Slider from 'react-rangeslider';
 import ContinueButton from './Components/ContinueButton';
+import ShareButton from './Components/ShareButton';
 import Container from './Components/Container';
 import ProgressBarContainer from './Components/ProgressBarContainer';
 import HorizontalLine from './Components/HorizontalLine';
@@ -53,6 +55,9 @@ class Main extends Component {
         }]
     }
 
+      lightbulb: {
+        quantity: 0
+      } 
     };
 
 
@@ -85,6 +90,21 @@ increment() {
     });
 }
 
+
+  renderUtility(utility) {
+    return (
+      <div style={styles.section1Utility.utilityContainer}>
+        <div style={styles.section1Utility.utilityHeader}>{utility}</div>
+        <div>
+          <span style={styles.section1Utility.utilityFactor}>Quantity</span>
+          <span><input style={styles.section1Utility.inputRange} type="range" min="0" max="100" value={this.state.lightbulb.quantity} onChange={(e)=>this.setState({lightbulb: {quantity: e.target.value}})} /></span>
+          <span>{this.state.lightbulb.quantity}</span>
+        </div>
+      </div>
+    );
+  }
+
+
   zipcodeOnChange(event) {
     this.setState({zipcode: event.target.value});
   }
@@ -92,18 +112,43 @@ increment() {
   renderHomePage() {
     return (
       <Container section="home">
-          <div style={styles.homepage.headerContainer}>
-            Energy Choices
-          </div>
-          <HorizontalLine />
-          <div style={styles.homepage.subtitleContainer}>
-            An explorable explanation of how to be<br/>
-            an energy ninja
-          </div>
-        <ContinueButton href="#unit-introduction" />
+        <div style={styles.homepage.headerContainer}>
+          Energy Choices
+        </div>
+        <HorizontalLine />
+        <div style={styles.homepage.subtitleContainer}>
+          An explorable explanation of how to be<br/>
+          an energy ninja
+        </div>
+        <ContinueButton href="#question-introduction" />
       </Container>
     )
   }
+
+  renderQuestionIntroduction() {
+    return (
+      <Container section="question-introduction">
+        <div style={styles.motivatingQuestion.headerContainer}>
+          What if we could save energy and the environment?
+        </div>
+        <HorizontalLine />
+        <div style={styles.motivatingQuestion.descriptionContainer}>
+          <p>
+            We often think there’s a <span style={styles.motivatingQuestion.boldContainer}>tradeoff </span> 
+            between what’s good for the Earth and good for our wallets. After all, buying a Tesla or installing 
+            solar panels seems pretty expensive. And no one wants to crank the thermostat up to 80 degrees in the summer 
+            just to save a bit of electricity.
+          </p>
+          <p>
+            But there are lots of choices that make both 
+            <span style={styles.motivatingQuestion.boldContainer}> economic</span> and 
+            <span style={styles.motivatingQuestion.boldContainer}> environmental</span> sense.
+          </p>
+        </div>
+        <ContinueButton href="#unit-introduction" />
+      </Container>
+    )
+  }  
 
   renderUnitIntroduction() {
     return (
@@ -132,7 +177,7 @@ increment() {
             <div style={styles.universal.mediumFont}>Did You Know That</div>
             <div style={styles.universal.smallFont}>On average, a single family house in your area uses energy</div>
             <div style={styles.universal.largeFont}>80K <img src={Image.lightbulb.medium} /> per month</div>
-            <ContinueButton href="#section1Utility" narration="Click Continue To Learn More About Your House" />
+            <ContinueButton href="#section1Utility" narration="Click 'Continue' To Learn More About Your House" />
           </div>
         )
       }
@@ -169,8 +214,27 @@ increment() {
           Section 1: My House
         </div>
         <HorizontalLine section />
-        Utility
-        <ContinueButton href="#section1CompareResult" />
+        <div style={styles.universal.smallFont}>Please Select Your Daily Energy Usage</div>
+        <div style={styles.section1Utility.utilityRow}>
+          {this.renderUtility("Lightbulb")}
+          {this.renderUtility("Lightbulb")}
+        </div>
+        <div style={styles.section1Utility.utilityRow}>
+          {this.renderUtility("Lightbulb")}
+          {this.renderUtility("Lightbulb")}
+        </div>
+        <div style={styles.section1Utility.utilityRow}>
+          {this.renderUtility("Lightbulb")}
+          {this.renderUtility("Lightbulb")}
+        </div>
+        <div style={styles.section1Utility.utilityRow}>
+          {this.renderUtility("Lightbulb")}
+          {this.renderUtility("Lightbulb")}
+        </div>
+        <div style={styles.section1Utility.totalEnergy}>
+          Your Estimated Total Monthly Energy Usage = XX.XXX <img src={Image.lightbulb.small} />
+        </div>
+        <ContinueButton href="#section1CompareResult" narration="Click 'Continue' To Compare Your Result With Your Neighbour "/>
       </ProgressBarContainer>
     );
   }
@@ -321,10 +385,38 @@ increment() {
     );
   }
 
+  renderConclusion() {
+    return (
+      <Container section="lastPage">
+        <div style={styles.motivatingQuestion.headerContainer}>
+          What if we could save energy and the environment?
+        </div>
+        <HorizontalLine />
+        <div style={styles.motivatingQuestion.subtitleContainer}>
+          We can! You can.
+        </div>
+        <div style={styles.motivatingQuestion.descriptionContainer}>
+          What’s good for the Earth can also be good for our wallets. You can save<br/>
+          money by making choices in your home that also help keep the<br/>
+          environment pure. The ideas here are only the beginning.
+        </div>
+        <div style={styles.motivatingQuestion.shareContainer}>
+          Share your choice to save
+        </div>
+        <span>
+          <ShareButton src={Image.share.facebook} href="https://facebook.com"/>
+          <ShareButton src={Image.share.twitter} href="https://twitter.com"/>
+          <ShareButton src={Image.share.email} href="https://www.google.com/gmail/"/>
+        </span>
+      </Container>
+    )
+  }
+
   render() {
     return (
       <div style={{height: "100%"}}>
         {this.renderHomePage()}
+        {this.renderQuestionIntroduction()}
         {this.renderUnitIntroduction()}
         {this.renderSection1Introduction()}
         {this.renderSection1Utility()}
@@ -335,6 +427,7 @@ increment() {
         {this.renderSection2Quiz()}
         {this.renderSection2Doughnut()}
         {this.renderSection3Introduction()}
+        {this.renderConclusion()}
       </div>
     );
   }
@@ -401,6 +494,28 @@ const styles = {
     },
   },
 
+  motivatingQuestion: {
+    headerContainer: {
+      fontSize: Metric.font.size.extraLarge,
+      fontWeight: Metric.font.weight.bold
+    },
+    subtitleContainer: {
+      fontSize: Metric.font.size.large,
+      fontWeight: Metric.font.weight.medium,
+    },
+    descriptionContainer: {
+      fontSize: Metric.font.size.medium
+    },
+    boldContainer: {
+      fontWeight: Metric.font.weight.bold
+    },
+    shareContainer: {
+      fontSize: Metric.font.size.large,
+      fontWeight: Metric.font.weight.medium,
+      margin: "50px 0 0 0"
+    }
+  },
+
   section1Introduction: {
     mediumText: {
       fontSize: Metric.font.size.medium,
@@ -417,6 +532,42 @@ const styles = {
       fontSize: Metric.font.size.large,
       border: "0",
       borderBottom: "2px solid " + Color.normalText
+    }
+  },
+
+  section1Utility: {
+    utilityRow: {
+      width: "100%",
+      height: "100px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-around",
+      margin: "20px 0"
+    },
+    utilityContainer: {
+      width: "45%",
+      height: "100px",
+      backgroundColor: Color.sand,
+      padding: "5px 10px",
+      textAlign: "left"
+    },
+    totalEnergy: {
+      fontSize: Metric.font.size.medium,
+      fontWeight: Metric.font.weight.bold,
+      margin: "20px 0"
+    },
+    utilityHeader: {
+      fontSize: Metric.font.size.medium,
+      fontWeight: Metric.font.weight.medium
+    },
+    utilityFactor: {
+      fontSize: Metric.font.size.small,
+      fontWeight: Metric.font.weight.light
+    },
+    inputRange: {
+      width: "200px",
+      height: "5px",
+      margin: "0 5px"
     }
   }
 }

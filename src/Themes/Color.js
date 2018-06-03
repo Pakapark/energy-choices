@@ -6,6 +6,7 @@ const Color = {
   horizontalLine: "#C9DAE1",
   unselected: "#C9DAE1",
   containerBorder: "#DDDDDD",
+  sand: "#E8D29B",
   black: "#000000",
 };
 

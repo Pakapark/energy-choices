@@ -8,6 +8,11 @@ const Image = {
     city: "../images/progress-bar-city.svg",
     world: "../images/progress-bar-world.svg",
     complete: "../images/progress-bar-complete.svg"
+  },
+  share: {
+    facebook: "../images/facebook.svg",
+    twitter: "../images/twitter.svg",
+    email: "../images/email.svg"
   }
 }
 
