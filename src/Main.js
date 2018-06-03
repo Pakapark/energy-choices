@@ -8,19 +8,88 @@ import HorizontalLine from './Components/HorizontalLine';
 import Color from './Themes/Color';
 import Metric from './Themes/Metric';
 import Image from './Themes/Image';
+import {Doughnut, defaults} from 'react-chartjs-2';
+
 
 class Main extends Component {
   constructor (props) {
     super(props);
     this.state = {
       zipcode: "",
+      city_energy_budget: 26.25,
+      city_energy_cost: 26.25,
+      
+      cost_per_kwh: [.11, .12, .08, .09, .14, .08],
+      energy_source_data: {
+        labels: [
+          
+
+          'Nuclear',
+          'Coal',
+          'Natural Gas',
+          "Hydropower, Biomass, Geothermal",
+          'Solar',
+          'Wind',
+        ],
+        datasets: [{
+          data: [33.1, 19.5, 32.7, 10, .6, 4.1],
+          backgroundColor: [
+            
+            '#E85349',
+            '#ED6472',
+            '#E58E97',
+            '#C9DAE1',
+            '#29ABC9',
+            '#218DA7',
+          ],
+          hoverBackgroundColor: [
+            '#c9473e',
+            '#ba4e59',
+            '#b57077',
+            '#9eacb2',
+            '#2088a0',
+            '#1a7084',
+
+
+          ]
+        }]
+    },
+
       lightbulb: {
         quantity: 0
-      }
+      } 
     };
 
+
     this.zipcodeOnChange = this.zipcodeOnChange.bind(this);
+    
   }
+
+
+  componentDidMount() {
+    this.timer = setInterval(
+      () => this.increment(),
+      500
+    )
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer)
+  }
+
+
+increment() {
+    const datasetsCopy = this.state.energy_source_data.datasets.slice(0);
+    const dataCopy = datasetsCopy[0].data.slice(0);
+    datasetsCopy[0].data = dataCopy;
+
+    this.setState({
+        data: Object.assign({}, this.state.energy_source_data, {
+            datasets: datasetsCopy
+        })
+    });
+}
+
 
   renderUtility(utility) {
     return (
@@ -34,6 +103,7 @@ class Main extends Component {
       </div>
     );
   }
+
 
   zipcodeOnChange(event) {
     this.setState({zipcode: event.target.value});
@@ -215,8 +285,88 @@ class Main extends Component {
           Section 2: My City
         </div>
         <HorizontalLine section />
-        Introduction
+         <div style={styles.universal.mediumFont}>
+        We have seen how energy choices effect your home, what happens when we make energy choices for our city?
+
+        </div>
         <ContinueButton href="#section3Introduction" />
+      </ProgressBarContainer>
+    );
+  }
+
+
+
+  renderSection2Quiz() {
+    return (
+      <ProgressBarContainer section="section1Summary" progress="home">
+        <div style={styles.universal.sectionHeadline}>
+          Energy Intuition 
+        </div>
+        <HorizontalLine section />
+        
+        <ContinueButton href="#section2Introduction" />
+      </ProgressBarContainer>
+    );
+  }
+
+
+
+
+  renderSection2Doughnut() {
+    
+    return (
+      <ProgressBarContainer section="section1Summary" progress="home">
+        <div style={styles.universal.sectionHeadline}>
+          Energy Sources 
+        </div>
+        <HorizontalLine section />
+        <div className="row">
+          <span className="col-sm-6">
+
+            <Doughnut data={this.state.energy_source_data}
+            width="100%"
+            height="100%"
+              onElementsClick={(elem) => 
+                { if (elem.length > 0) {
+                    var updated_cost = 0
+                    console.log(elem[0]["_index"])
+                    var energySourceDataCopy = this.state.energy_source_data;
+                    energySourceDataCopy.datasets[0]["data"][elem[0]["_index"]] *= 1.1;
+                    var total = 0
+                    for (var i = 0; i < energySourceDataCopy.datasets[0]["data"].length; i++) {
+                      total+= energySourceDataCopy.datasets[0]["data"][i];
+                    }
+                    for (var j = 0; j < energySourceDataCopy.datasets[0]["data"].length; j++) {
+                      energySourceDataCopy.datasets[0]["data"][j]/= total;
+                      updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265
+                      console.log(this.state.cost_per_kwh[j])
+                      console.log(energySourceDataCopy.datasets[0]["data"][j])
+
+
+
+
+                    }
+                    this.setState({city_energy_cost: updated_cost.toFixed(2)})
+
+                    console.log(energySourceDataCopy.datasets[0]["data"][elem[0]["_index"]])
+                    this.setState({energy_source_data: Object.assign({}, energySourceDataCopy)});
+                  }
+              }} />
+            </span>
+            <span className="col-sm-6">
+            <div style={styles.universal.mediumFont}>Monthy Energy Consuption:</div>
+          <div style={styles.universal.smallFont}>
+        City Budget: ${ this.state.city_energy_budget }M
+      </div>
+
+        <div style={styles.universal.smallFont}>
+        Total Cost: ${ this.state.city_energy_cost }M
+        </div>
+            </span>
+        </div>
+
+        
+        <ContinueButton href="#section2Introduction" />
       </ProgressBarContainer>
     );
   }
@@ -322,6 +472,8 @@ class Main extends Component {
         {this.renderSection1Suggestion()}
         {this.renderSection1Summary()}
         {this.renderSection2Introduction()}
+        {this.renderSection2Quiz()}
+        {this.renderSection2Doughnut()}
         {this.renderSection3Introduction()}
         {this.renderSection3Choies()}
         {this.renderConclusion()}
