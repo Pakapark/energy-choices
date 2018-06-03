@@ -16,8 +16,8 @@ class Main extends Component {
     super(props);
     this.state = {
       zipcode: "",
-      city_energy_budget: 11.7,
-      city_energy_cost: 11.7,
+      city_energy_budget: 26.25,
+      city_energy_cost: 26.25,
       
       cost_per_kwh: [.11, .12, .08, .09, .14, .08],
       energy_source_data: {
@@ -53,7 +53,7 @@ class Main extends Component {
 
           ]
         }]
-    }
+    },
 
       lightbulb: {
         quantity: 0
