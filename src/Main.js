@@ -313,6 +313,10 @@ increment() {
 
 
   renderSection2Doughnut() {
+
+
+
+
     
     return (
       <ProgressBarContainer section="section1Summary" progress="home">
@@ -324,8 +328,8 @@ increment() {
           <span className="col-sm-6">
 
             <Doughnut data={this.state.energy_source_data}
-            width="100%"
-            height="100%"
+            width="80%"
+            height="80%"
               onElementsClick={(elem) => 
                 { if (elem.length > 0) {
                     var updated_cost = 0
@@ -342,9 +346,6 @@ increment() {
                       console.log(this.state.cost_per_kwh[j])
                       console.log(energySourceDataCopy.datasets[0]["data"][j])
 
-
-
-
                     }
                     this.setState({city_energy_cost: updated_cost.toFixed(2)})
 
@@ -357,11 +358,15 @@ increment() {
             <div style={styles.universal.mediumFont}>Monthy Energy Consuption:</div>
           <div style={styles.universal.smallFont}>
         City Budget: ${ this.state.city_energy_budget }M
-      </div>
 
-        <div style={styles.universal.smallFont}>
-        Total Cost: ${ this.state.city_energy_cost }M
+       | Total Cost: ${ this.state.city_energy_cost }M
+
+        <div style={styles.universal.smallFont}> Total Savings: <p style={this.state.city_energy_budget - this.state.city_energy_cost >=0 ? styles.universal.smallFont_positive : styles.universal.smallFont_negative}> ${ (this.state.city_energy_budget - this.state.city_energy_cost).toFixed(2) }M </p></div> 
+
+
         </div>
+
+        
             </span>
         </div>
 
@@ -507,6 +512,20 @@ const styles = {
       fontWeight: Metric.font.weight.bold,
       margin: "30px 0"
     },
+
+    smallFont_negative: {
+      fontSize: Metric.font.size.medium,
+      fontWeight: Metric.font.weight.regular,
+      color: "#E85349"
+
+    },
+
+    smallFont_positive: {
+      fontSize: Metric.font.size.medium,
+      fontWeight: Metric.font.weight.regular,
+      color: "#3CB371"
+
+    }
   },
 
   // Home Page
@@ -631,6 +650,8 @@ const styles = {
       weight: Metric.font.weight.medium
     }
   }
+
+
 
 }
 
