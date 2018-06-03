@@ -230,9 +230,57 @@ class Main extends Component {
         </div>
         <HorizontalLine section />
         Introduction
-        <ContinueButton href="#lastPage" />
+        <ContinueButton href="#section3Choices" />
       </ProgressBarContainer>
     );
+  }
+
+  renderSection3Choies() {
+      return (
+      <ProgressBarContainer section="section3Choices" progress="world">
+        <div style={styles.universal.sectionHeadline}>
+          Section 3: My World
+        </div>
+        <HorizontalLine section />
+        <div style={styles.universal.largeFont}>
+          What will you do to save?
+        </div>
+        <form>
+
+          <div style={styles.section3Choices.checkboxContainer}>
+            <label className="container">
+              <input type="checkbox"/>
+              <span className="checkmark"></span>
+            </label>
+            <a style={styles.section3Choices.checkboxText} href="https://news.energysage.com/compare-solar-panel-prices-california/">Install solar panels</a>
+          </div>
+
+          <div style={styles.section3Choices.checkboxContainer}>
+            <label className="container">
+              <input type="checkbox"/>
+              <span className="checkmark"></span>
+            </label>
+            <a style={styles.section3Choices.checkboxText} href="https://www.energyupgradeca.org/home-energy-efficiency/appliances/">Upgrade my appliances</a>
+          </div>
+          <div style={styles.section3Choices.checkboxContainer}>
+            <label className="container">
+              <input type="checkbox"/>
+              <span className="checkmark"></span>
+            </label>
+            <a style={styles.section3Choices.checkboxText} href="https://www.energyupgradeca.org/home-energy-efficiency/upgrading-your-home/">Follow energy saving tips</a>
+          </div>
+          <div style={styles.section3Choices.checkboxContainer}>
+            <label className="container">
+              <input type="checkbox"/>
+              <span className="checkmark"></span>
+            </label>
+            <a style={styles.section3Choices.checkboxText} href="http://www.iliveinthebayarea.com/knowledge-center/transit/">Take more public transit</a>
+          </div>
+     
+        </form>
+        <ContinueButton href="#lastPage" />
+      </ProgressBarContainer>
+    );  
   }
 
   renderConclusion() {
@@ -254,9 +302,9 @@ class Main extends Component {
           Share your choice to save
         </div>
         <span>
-          <ShareButton src={Image.share.facebook} href="https://facebook.com"/>
-          <ShareButton src={Image.share.twitter} href="https://twitter.com"/>
-          <ShareButton src={Image.share.email} href="https://www.google.com/gmail/"/>
+          <ShareButton src={Image.share.facebook} href="https://facebook.com" alt="Facebook"/>
+          <ShareButton src={Image.share.twitter} href="https://twitter.com" alt="Twitter"/>
+          <ShareButton src={Image.share.email} href="https://www.google.com/gmail/" alt="Email"/>
         </span>
       </Container>
     )
@@ -275,6 +323,7 @@ class Main extends Component {
         {this.renderSection1Summary()}
         {this.renderSection2Introduction()}
         {this.renderSection3Introduction()}
+        {this.renderSection3Choies()}
         {this.renderConclusion()}
       </div>
     );
@@ -417,8 +466,23 @@ const styles = {
       height: "5px",
       margin: "0 5px"
     }
+  },
+
+  section3Choices: {
+    checkboxContainer: {
+      marginTop: "50px",
+      textAlign: "left"
+    },
+    checkboxText: {
+      paddingLeft: "60px",
+      fontSize: Metric.font.size.medium,
+      weight: Metric.font.weight.medium
+    }
   }
+
 }
+
+
 
 
 export default Main;

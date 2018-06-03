@@ -19,7 +19,7 @@ class ShareButton extends Component {
     return (
       <div style={styles.buttonContainer}>
         <a href={this.props.href}>
-          <img src={this.props.src}/>
+          <img src={this.props.src} alt={this.props.alt}/>
         </a>
       </div>
     );
