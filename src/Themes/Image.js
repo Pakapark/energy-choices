@@ -28,7 +28,13 @@ const Image = {
   checkbox: {
     unchecked: "../images/input-checkbox.svg",
     checked: "../images/input-checkbox-checked.svg"
+  },
+
+  city: {
+    city_full: "../images/city.svg",
+
   }
+   
 }
 
 export default Image;

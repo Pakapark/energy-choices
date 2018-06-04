@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Doughnut, defaults} from 'react-chartjs-2';
 import ContinueButton from './Components/ContinueButton';
 import ShareButton from './Components/ShareButton';
+import QuizButton from './Components/QuizButton';
 import Container from './Components/Container';
 import ProgressBarContainer from './Components/ProgressBarContainer';
 import HorizontalLine from './Components/HorizontalLine';
@@ -9,6 +10,8 @@ import Color from './Themes/Color';
 import Metric from './Themes/Metric';
 import Image from './Themes/Image';
 import nl2br from 'react-newline-to-break';
+import { Button, ButtonToolbar,  ButtonGroup} from 'react-bootstrap';
+import {Bar} from 'react-chartjs-2';
 
 
 const DRYING_MACHINE_COST = 56;
@@ -39,6 +42,8 @@ class Main extends Component {
     super(props);
     this.state = {
       shouldHide: true,
+      total_co2: 99186.00,
+      original_co2: 99186,
       current_source: {},
       zipcode: "",
 
@@ -78,6 +83,8 @@ class Main extends Component {
       city_energy_cost: 26.25,
 
       cost_per_kwh: [.11, .12, .08, .09, .14, .08],
+
+      co: [ 66, 1050, 443, 26, 13, 9],
       energy_data_details: [
       {
         Name: "Nuclear",
@@ -85,7 +92,8 @@ class Main extends Component {
         Disadvantages: " - Risk of nuclear accidents \n - Nuclear waste \n - Radioactive explosion ",
         cost_per_kwh: "0.11",
         c_cost: "0.08",
-        o_cost: "0.03"
+        o_cost: "0.03",
+        co: 66.
       },
 
       {
@@ -94,7 +102,8 @@ class Main extends Component {
         Disadvantages: "- Greenhouse gas emissions \n - Generation of millions of tons of waste \n - Emission of mercury, sulfur dioxide, carbon monoxide, mercury, selenium, and arsenic",
         cost_per_kwh: "0.12",
         c_cost: "0.08",
-        o_cost: "0.04"
+        o_cost: "0.04",
+        co: 1050.
       },
 
       {
@@ -103,7 +112,8 @@ class Main extends Component {
         Disadvantages: "- Greenhouse gas emissions \n - Susceptible to dangerous explosions \n - Emission of carbon monoxide",
         cost_per_kwh: "0.08",
         c_cost: "0.02",
-        o_cost: "0.06"
+        o_cost: "0.06",
+        co: 443.
       },
 
 
@@ -113,7 +123,8 @@ class Main extends Component {
         Disadvantages: "",
         cost_per_kwh: "0.11",
         c_cost: "0.08",
-        o_cost: "0.03"
+        o_cost: "0.03",
+        co: 26.
       },
 
       {
@@ -123,6 +134,7 @@ class Main extends Component {
         cost_per_kwh: "0.14",
         c_cost: "0.13",
         o_cost: "0.01",
+        co: 13.
       },
 
 
@@ -132,7 +144,9 @@ class Main extends Component {
         Disadvantages: " - Turbines might cause noise and aesthetic pollution \n - Weather Dependent \n - Uses a Lot of Space",
         cost_per_kwh: "0.08",
         c_cost: "0.07",
-        o_cost: "0.01"
+        o_cost: "0.01",
+        co: 9.
+
       },
 
 
@@ -168,6 +182,39 @@ class Main extends Component {
           ]
         }]
       },
+
+  data1: {
+    labels: ['New England',
+'East North Central',
+'West North Central',
+'South Atlantic',
+'East South Central',
+'West South Central',
+'Mountain North',
+'Mountain South',
+'Pacific',],
+  
+  datasets: [
+
+    {
+    label: "Millions of Dollars in Energy Spending",
+      backgroundColor: 'rgba(255,99,132,0.2)',
+      borderColor: 'rgba(255,99,132,1)',
+      borderWidth: 1,
+      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+      hoverBorderColor: 'rgba(255,99,132,1)',
+      data: [(14.31/12*100), (33.36/12*100),
+(31.88/12*100),
+(14.54/12*100),
+(46.09/12*100),
+(13.72/12*100),
+(25.38/12*100),
+(6.74/12*100),
+(7.2/12*100),
+(26.12/12*100)]
+    }
+  ]
+},
 
       lightbulb: {
         quantity: 0
@@ -403,7 +450,7 @@ class Main extends Component {
             <div>&nbsp; {this.state.lightbulbQuantity} lightbulbs</div>
           </div>
           <div style={styles.section1Utility.utilitySliderContainer}>
-            <div style={styles.section1Utility.utilityFactor}>Turn On</div>
+            <div style={styles.section1Utility.utilityFactor}>Duration</div>
             <div>
               <input
                 style={styles.section1Utility.inputRange}
@@ -482,7 +529,7 @@ class Main extends Component {
             <div>&nbsp; {this.state.laptopQuantity} laptop</div>
           </div>
           <div style={styles.section1Utility.utilitySliderContainer}>
-            <div style={styles.section1Utility.utilityFactor}>Turn On</div>
+            <div style={styles.section1Utility.utilityFactor}>Duration</div>
             <div>
               <input
                 style={styles.section1Utility.inputRange}
@@ -575,7 +622,7 @@ class Main extends Component {
             <div>&nbsp; {this.state.televisionQuantity} televisions</div>
           </div>
           <div style={styles.section1Utility.utilitySliderContainer}>
-            <div style={styles.section1Utility.utilityFactor}>Turn On</div>
+            <div style={styles.section1Utility.utilityFactor}>Duration</div>
             <div>
               <input
                 style={styles.section1Utility.inputRange}
@@ -1154,6 +1201,7 @@ class Main extends Component {
     );
   }
 
+
   renderSection2Introduction() {
     return (
       <ProgressBarContainer section="section2Introduction" progress="city">
@@ -1161,14 +1209,46 @@ class Main extends Component {
           Section 2: My City
         </div>
         <HorizontalLine section />
-         <div style={styles.universal.mediumFont}>
+         <div style={styles.universal.largeFont_reg}>
         We have seen how energy choices effect your home, what happens when we make energy choices for our city?
 
+
+
         </div>
-        <ContinueButton href="#section2Quiz" />
+<img alt="" src={Image.city.city_full} />
+                 <div style={styles.universal.mediumFont}>
+                How much energy do you think your city (with 280,000 housholds) uses per month?
+
+
+
+        </div>
+
+          <div style={styles.universal.smallFont}>Hint: Your housold total was {this.state.totalHouseEnergy} <img alt=""src={Image.lightbulb.small} /></div>
+
+        <div className="row h-40">
+
+
+        <span className="col-sm-4">
+
+
+
+  <QuizButton href="#section2Quiz" text="Less than 1 Billion "/>
+  </span>
+  <span className="col-sm-4">
+
+
+  <QuizButton href="#section2Quiz" text="Between 1 and 5 Billion"/>
+  </span> 
+
+  <span className="col-sm-4">
+    <QuizButton href="#section2Quiz" text="More than 5 Billion"/>
+  </span >
+</div>
       </ProgressBarContainer>
     );
   }
+
+
 
 
 
@@ -1179,6 +1259,27 @@ class Main extends Component {
           Energy Intuition
         </div>
         <HorizontalLine section />
+
+                 <div style={styles.universal.largeFont_reg}>
+        On average, your city uses an estimated 4.4 Billion <img alt=""src={Image.lightbulb.medium} /> of energy per month for a total cost of ${ this.state.city_energy_budget }M
+
+
+
+        </div>
+                <HorizontalLine section />
+
+
+              <div className="row ">
+        <span className="col-sm-6">
+
+        <Bar data={this.state.data1} />
+        </span>
+
+        <span className="col-sm-6">
+
+         <div style={styles.universal.mediumFont}>Average monthy energy spending in the U.S. is ${(219.34/12).toFixed(2)} Billion. This graph shows the geographic breakdown of that spending.</div>
+        </span>
+        </div>
 
         <ContinueButton href="#section2Doughnut" />
       </ProgressBarContainer>
@@ -1191,55 +1292,55 @@ class Main extends Component {
   renderSection2Doughnut() {
 
     return (
-      <ProgressBarContainer section="section2Doughnut" progress="home">
-        <div style={styles.universal.sectionHeadline}>
-          My City's Energy Sources: Financial Breakdown 
-        </div>
-        <HorizontalLine section />
-        <div className="row ">
-          <span className="col-sm-4">
+    <ProgressBarContainer section="section2Doughnut" progress="home">
+      <div style={styles.universal.sectionHeadline}>
+        My City's Energy Sources: Financial Breakdown 
+      </div>
+      <HorizontalLine section />
+      <div className="row ">
+        <span className="col-sm-4">
           <div className="row">
             <Doughnut data={this.state.energy_source_data} width="80%" height="80%"
-              onElementsClick={(elem) => 
+            onElementsClick={(elem) => 
 
-                { if (elem.length > 0) {
-                  var s = false
-                    var updated_cost = 0
-                    console.log()
-                    var energySourceDataCopy = this.state.energy_source_data;
-                    energySourceDataCopy.datasets[0]["data"][elem[0]["_index"]] *= 1.1;
-                    var total = 0
-                    for (var i = 0; i < energySourceDataCopy.datasets[0]["data"].length; i++) {
-                      total+= energySourceDataCopy.datasets[0]["data"][i];
-                    }
-                    for (var j = 0; j < energySourceDataCopy.datasets[0]["data"].length; j++) {
-                      energySourceDataCopy.datasets[0]["data"][j]/= total;
-                      updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265
-                     
-                    }
-                    this.setState({city_energy_cost: updated_cost.toFixed(2)})
-                    this.setState({current_source: Object.assign({}, this.state.energy_data_details[elem[0]["_index"]])});
-                    this.state.shouldHide = false
-                    this.setState({energy_source_data: Object.assign({}, energySourceDataCopy)});
-                    this.setState({shouldHide: s});
-                  }
-              }} />
-              </div>
-              <div className="row">
-                      <div style={styles.universal.grey_box}> 
-          Click on the the energy sources in this graph to learn the facts about each source 
-        </div>
-              </div>
+            { if (elem.length > 0) {
+              var s = false
+              var updated_cost = 0
+              console.log()
+              var energySourceDataCopy = this.state.energy_source_data;
+              energySourceDataCopy.datasets[0]["data"][elem[0]["_index"]] *= 1.1;
+              var total = 0
+              for (var i = 0; i < energySourceDataCopy.datasets[0]["data"].length; i++) {
+              total+= energySourceDataCopy.datasets[0]["data"][i];
+            }
+            for (var j = 0; j < energySourceDataCopy.datasets[0]["data"].length; j++) {
+            energySourceDataCopy.datasets[0]["data"][j]/= total;
+            updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265
 
-            </span>
-            <span className="col-sm-6">
-            <div style={styles.universal.mediumFont}>Monthy Energy Consuption:</div>
-          <div style={styles.universal.smallFont}>
-        City Budget: ${ this.state.city_energy_budget }M
+          }
+          this.setState({city_energy_cost: updated_cost.toFixed(2)})
+          this.setState({current_source: Object.assign({}, this.state.energy_data_details[elem[0]["_index"]])});
+          this.state.shouldHide = false
+          this.setState({energy_source_data: Object.assign({}, energySourceDataCopy)});
+          this.setState({shouldHide: s});
+        }
+      }} />
+    </div>
+    <div className="row">
+      <div style={styles.universal.grey_box}> 
+        Click on the the energy sources in this graph to learn the facts about each source 
+      </div>
+    </div>
 
-       | Total Cost: ${ this.state.city_energy_cost }M
+  </span>
+  <span className="col-sm-6">
+    <div style={styles.universal.mediumFont}>Monthy Energy Consuption:</div>
+    <div style={styles.universal.smallFont}>
+      City Budget: ${ this.state.city_energy_budget }M
 
-        <div style={styles.universal.smallFont}> Total Savings: 
+      | Total Cost: ${ this.state.city_energy_cost }M
+
+      <div style={styles.universal.smallFont}> Total Savings: 
         <p style={this.state.city_energy_budget - this.state.city_energy_cost >=0 ? styles.universal.smallFont_positive : styles.universal.smallFont_negative}> ${ (this.state.city_energy_budget - this.state.city_energy_cost).toFixed(2) }M 
         </p></div> 
         
@@ -1247,43 +1348,176 @@ class Main extends Component {
 
 
         <div style={this.state.shouldHide ? {display: 'none'} : styles.universal.grey_box }> 
-        <p style={styles.universal.largeFont_reg}> {this.state.current_source["Name"]} </p>
-        <div className="row ">
-        <span className="col-sm-4">
-<p style={styles.universal.smallFont_left}>         <p style={styles.universal.smallFont_positive}> 
-        
-        Advantages:  </p>{nl2br(this.state.current_source["Advantages"])}
-        </p></span>
-        <span className="col-sm-4">
- <p style={styles.universal.smallFont_left}>        
- <p style={styles.universal.smallFont_negative}> 
+          <p style={styles.universal.largeFont_reg}> {this.state.current_source["Name"]} </p>
+          <div className="row ">
+            <span className="col-sm-4">
+              <p style={styles.universal.smallFont_left}>         <p style={styles.universal.smallFont_positive}> 
+
+              Advantages:  </p>{nl2br(this.state.current_source["Advantages"])}
+            </p></span>
+            <span className="col-sm-4">
+             <p style={styles.universal.smallFont_left}>        
+               <p style={styles.universal.smallFont_negative}> 
 
 
-        Disadvantages: </p>{nl2br(this.state.current_source["Disadvantages"])}
-        </p>
-        </span>
-<span className="col-sm-4">
- <p style={styles.universal.smallFont_left}>     
-        <p style={styles.universal.smallFont_bold}> 
-        Total Cost: ${this.state.current_source["cost_per_kwh"]}/KWH</p> 
-        Infrastructure Cost: ${this.state.current_source["c_cost"]}/KWH
-        <br/>
-        Fuel Generation Cost: ${this.state.current_source["o_cost"]} /KWH
-        </p>
-</span>
-
-        </div>
-        
-        </div> 
-
+               Disadvantages: </p>{nl2br(this.state.current_source["Disadvantages"])}
+             </p>
+           </span>
+           <span className="col-sm-4">
+             <p style={styles.universal.smallFont_left}>     
+              <p style={styles.universal.smallFont_bold}> 
+              Total Cost: ${this.state.current_source["cost_per_kwh"]}/KWH</p> 
+              Infrastructure Cost: ${this.state.current_source["c_cost"]}/KWH
+              <br/>
+              Fuel Generation Cost: ${this.state.current_source["o_cost"]} /KWH
+            </p>
+          </span>
 
         </div>
-
         
-            </span>
+      </div> 
+
+
+    </div>
+
+
+  </span>
+</div>
+<ContinueButton href="#Section2Eco" />
+</ProgressBarContainer>
+    );
+  }
+
+  renderSection2Eco() {
+    return (
+      <ProgressBarContainer section="Section2Eco" progress="city">
+        <div style={styles.universal.sectionHeadline}>
+          My City: Environmental Impacts 
         </div>
-        <ContinueButton href="#section3Comparison" />
+        <HorizontalLine section />
+         <div style={styles.universal.largeFont_reg}>
+        What happens when we factor environmental impacts into the energy decisions for our city?
+
+
+
+        </div>
+<img alt="" src={Image.city.city_full} />
+                 <div style={styles.universal.mediumFont}>
+                Energy sources contribute differently to harmful emissions. Let's explore. </div>
+
+
+<ContinueButton href="#section2DoughnutEco" />
+
       </ProgressBarContainer>
+    );
+  }
+
+
+  renderSection2DoughnutEco() {
+
+    return (
+    <ProgressBarContainer section="#section2DoughnutEco" progress="home">
+      <div style={styles.universal.sectionHeadline}>
+        My City's Energy Sources: Financial Breakdown 
+      </div>
+      <HorizontalLine section />
+      <div className="row ">
+        <span className="col-sm-4">
+          <div className="row">
+            <Doughnut data={this.state.energy_source_data} width="80%" height="80%"
+            onElementsClick={(elem) => 
+
+            { if (elem.length > 0) {
+              var s = false
+              var updated_cost = 0
+              var updated_co2 = 0
+              console.log()
+              var energySourceDataCopy = this.state.energy_source_data;
+              energySourceDataCopy.datasets[0]["data"][elem[0]["_index"]] *= 1.1;
+              var total = 0
+              for (var i = 0; i < energySourceDataCopy.datasets[0]["data"].length; i++) {
+              total+= energySourceDataCopy.datasets[0]["data"][i];
+            }
+            for (var j = 0; j < energySourceDataCopy.datasets[0]["data"].length; j++) {
+            energySourceDataCopy.datasets[0]["data"][j]/= total;
+            updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265
+            
+
+            updated_co2 +=this.state.co[j]*energySourceDataCopy.datasets[0]["data"][j]*265
+
+
+          }
+          this.setState({city_energy_cost: updated_cost.toFixed(2)})
+          this.setState({current_source: Object.assign({}, this.state.energy_data_details[elem[0]["_index"]])});
+          this.state.shouldHide = false
+          this.setState({energy_source_data: Object.assign({}, energySourceDataCopy)});
+          this.setState({shouldHide: s})
+          this.setState({total_co2: updated_co2});
+        }
+      }} />
+    </div>
+    <div className="row">
+      <div style={styles.universal.grey_box}> 
+        Click on the the energy sources in this graph to learn the facts about each source 
+      </div>
+    </div>
+
+  </span>
+  <span className="col-sm-6">
+    <div style={styles.universal.mediumFont}>Monthy Energy Consuption:</div>
+    <div style={styles.universal.smallFont}>
+      City Budget: ${ this.state.city_energy_budget }M
+
+      | Total Cost: ${ this.state.city_energy_cost }M
+
+      <div style={styles.universal.smallFont}> Total Savings: 
+        <p style={this.state.city_energy_budget - this.state.city_energy_cost >=0 ? styles.universal.smallFont_positive : styles.universal.smallFont_negative}> ${ (this.state.city_energy_budget - this.state.city_energy_cost).toFixed(2) }M 
+        </p></div> 
+        
+
+        <p style={(this.state.total_co2 - this.state.original_co2) >=0 ?  styles.universal.smallFont_negative : styles.universal.smallFont_positive}> 
+         New Co2 Contributions: {(this.state.total_co2 - this.state.original_co2).toFixed(2)} </p>
+
+        <div style={this.state.shouldHide ? {display: 'none'} : styles.universal.grey_box }> 
+          <p style={styles.universal.largeFont_reg}> {this.state.current_source["Name"]} </p>
+          <div className="row ">
+            <span className="col-sm-4">
+              <p style={styles.universal.smallFont_left}>         <p style={styles.universal.smallFont_positive}> 
+
+              Advantages:  </p>{nl2br(this.state.current_source["Advantages"])}
+            </p></span>
+            <span className="col-sm-4">
+             <p style={styles.universal.smallFont_left}>        
+               <p style={styles.universal.smallFont_negative}> 
+
+
+               Disadvantages: </p>{nl2br(this.state.current_source["Disadvantages"])}
+             </p>
+           </span>
+           <span className="col-sm-4">
+             <p style={styles.universal.smallFont_left}>     
+              <p style={styles.universal.smallFont_bold}> 
+              Total Cost: ${this.state.current_source["cost_per_kwh"]}/KWH</p> 
+              Infrastructure Cost: ${this.state.current_source["c_cost"]}/KWH
+              <br/>
+              Fuel Generation Cost: ${this.state.current_source["o_cost"]} /KWH
+            <br/>
+             
+            </p>
+          </span>
+
+        </div>
+        
+      </div> 
+
+
+    </div>
+
+
+  </span>
+</div>
+<ContinueButton href="#section3Comparison" />
+</ProgressBarContainer>
     );
   }
 
@@ -1442,6 +1676,8 @@ class Main extends Component {
         {this.renderSection2Introduction()}
         {this.renderSection2Quiz()}
         {this.renderSection2Doughnut()}
+        {this.renderSection2Eco()}
+        {this.renderSection2DoughnutEco()}
         {this.renderSection3Comparison()}
         {this.renderSection3Choies()}
         {this.renderConclusion()}
