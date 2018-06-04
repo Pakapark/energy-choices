@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
-import {Doughnut, defaults} from 'react-chartjs-2';
+import {Doughnut, Bar, defaults} from 'react-chartjs-2';
 import ContinueButton from './Components/ContinueButton';
 import ShareButton from './Components/ShareButton';
-import QuizButton from './Components/QuizButton';
 import Container from './Components/Container';
+import QuizButton from './Components/QuizButton';
 import ProgressBarContainer from './Components/ProgressBarContainer';
 import HorizontalLine from './Components/HorizontalLine';
+import nl2br from 'react-newline-to-break';
 import Color from './Themes/Color';
 import Metric from './Themes/Metric';
 import Image from './Themes/Image';
-import nl2br from 'react-newline-to-break';
 import { Button, ButtonToolbar,  ButtonGroup} from 'react-bootstrap';
-import {Bar} from 'react-chartjs-2';
-
 
 const DRYING_MACHINE_COST = 56;
 const DAYS_IN_MONTH = 30;
@@ -22,8 +20,9 @@ const WASHING_MACHINE_COST_HOT = 48;
 const CAR_COST = 23;
 const HEATER_CONSTANT = 250;
 const AC_CONSTANT = 50;
+
 const GLOBAL_ELECTRICITY_USAGE = 152.25; // In trillion bulbs per month
-const GLOBAL_CITIES_CONVERSION = 200; // Converts from millions to billions of dollars
+const GLOBAL_CITIES_CONVERSION = 200; // Converts to trillions of dollars
 
 const NEIGHBOUR = {
   LIGHTBULB: 3000,
@@ -45,39 +44,42 @@ class Main extends Component {
       total_co2: 99186.00,
       original_co2: 99186,
       current_source: {},
+
       zipcode: "",
 
-      lightbulbQuantity: 0,
-      lightbulbDuration: 0,
-      lightbulbEnergy: 0,
+      lightbulbQuantity: 20,
+      lightbulbDuration: 5,
+      lightbulbEnergy: 3000,
 
-      dryingMachineQuantity: 0,
-      dryingMachineEnergy: 0,
+      dryingMachineQuantity: 25,
+      dryingMachineEnergy: 1400,
 
-      laptopQuantity: 0,
-      laptopDuration: 0,
-      laptopEnergy: 0,
+      laptopQuantity: 3,
+      laptopDuration: 8,
+      laptopEnergy: 720,
 
-      airConditionerDuration: 0,
-      airConditionerTemperature: 70,
-      airConditionerEnergy: 0,
+      airConditionerDuration: 10,
+      airConditionerTemperature: 68,
+      airConditionerEnergy: 20101,
 
-      televisionQuantity: 0,
-      televisionDuration: 0,
-      televisionEnergy: 0,
+      televisionQuantity: 2,
+      televisionDuration: 6,
+      televisionEnergy: 1080,
 
-      heaterTemperature: 0,
-      heaterDuration: 0,
-      heaterEnergy: 0,
+      heaterTemperature: 20,
+      heaterDuration: 8,
+      heaterEnergy: 30000,
 
-      washingMachineQuantity: 0,
-      washingMachineWater: 0,
-      washingMachineEnergy: 0,
+      washingMachineColdChecked: true,
+      washingMachineHotChecked: false,
+      washingMachineQuantity: 25,
+      washingMachineWater: 31,
+      washingMachineEnergy: 775,
 
-      carMile: 0,
-      carEnergy: 0,
+      carMile: 28,
+      carEnergy: 19320,
 
-      totalHouseEnergy: 0,
+      totalHouseEnergy: 75856,
 
       city_energy_budget: 26.25,
       city_energy_cost: 26.25,
@@ -85,8 +87,7 @@ class Main extends Component {
       cost_per_kwh: [.11, .12, .08, .09, .14, .08],
 
       co: [ 66, 1050, 443, 26, 13, 9],
-      energy_data_details: [
-      {
+      energy_data_details: [{
         Name: "Nuclear",
         Advantages: " - Domestic source of energy \n - Affordability \n - Cleaner than fossil fuels",
         Disadvantages: " - Risk of nuclear accidents \n - Nuclear waste \n - Radioactive explosion ",
@@ -94,140 +95,123 @@ class Main extends Component {
         c_cost: "0.08",
         o_cost: "0.03",
         co: 66.
-      },
+      }, {
+          Name: "Coal",
+          Advantages: " - Reliability \n - Affordability \n - Abundance",
+          Disadvantages: "- Greenhouse gas emissions \n - Generation of millions of tons of waste \n - Emission of mercury, sulfur dioxide, carbon monoxide, mercury, selenium, and arsenic",
+          cost_per_kwh: "0.12",
+          c_cost: "0.08",
+          o_cost: "0.04",
+          co: 1050.
+        }, {
+          Name: "Natural Gas",
+          Advantages: " - Reliability \n - Affordability \n - Abundance",
+          Disadvantages: "- Greenhouse gas emissions \n - Susceptible to dangerous explosions \n - Emission of carbon monoxide",
+          cost_per_kwh: "0.08",
+          c_cost: "0.02",
+          o_cost: "0.06",
+          co: 443.
+        }, {
+          Name: "Hydropower, Biomass, Geothermal",
+          Advantages: " - Domestic source of energy \n - Affordability \n - Cleaner than fossil fuels",
+          Disadvantages: "",
+          cost_per_kwh: "0.11",
+          c_cost: "0.08",
+          o_cost: "0.03",
+          co: 26.
+        }, {
+          Name: "Solar" ,
+          Advantages: " - Renewable  \n - Clean \n- Abundance \n - Excess power can be sold back to the power company \n - Safer for energy workers \n - Domestic source of energy",
+          Disadvantages: " - Risk of nuclear accidents \n - Nuclear waste \n - Radioactive explosion ",
+          cost_per_kwh: "0.14",
+          c_cost: "0.13",
+          o_cost: "0.01",
+          co: 13.
+        }, {
+          Name: "Wind",
+          Advantages: "- Affordable \n - Renewable \n - Clean \n - Domestic source of energy \n - Excess power can be sold back to the power company \n - Safer for energy workers",
+          Disadvantages: " - Turbines might cause noise and aesthetic pollution \n - Weather Dependent \n - Uses a Lot of Space",
+          cost_per_kwh: "0.08",
+          c_cost: "0.07",
+          o_cost: "0.01",
+          co: 9.
+        }],
 
-      {
-        Name: "Coal",
-        Advantages: " - Reliability \n - Affordability \n - Abundance",
-        Disadvantages: "- Greenhouse gas emissions \n - Generation of millions of tons of waste \n - Emission of mercury, sulfur dioxide, carbon monoxide, mercury, selenium, and arsenic",
-        cost_per_kwh: "0.12",
-        c_cost: "0.08",
-        o_cost: "0.04",
-        co: 1050.
-      },
-
-      {
-        Name: "Natural Gas",
-        Advantages: " - Reliability \n - Affordability \n - Abundance",
-        Disadvantages: "- Greenhouse gas emissions \n - Susceptible to dangerous explosions \n - Emission of carbon monoxide",
-        cost_per_kwh: "0.08",
-        c_cost: "0.02",
-        o_cost: "0.06",
-        co: 443.
-      },
-
-
-      {
-        Name: "Hydropower, Biomass, Geothermal",
-        Advantages: " - Domestic source of energy \n - Affordability \n - Cleaner than fossil fuels",
-        Disadvantages: "",
-        cost_per_kwh: "0.11",
-        c_cost: "0.08",
-        o_cost: "0.03",
-        co: 26.
-      },
-
-      {
-        Name: "Solar" ,
-        Advantages: " - Renewable  \n - Clean \n- Abundance \n - Excess power can be sold back to the power company \n - Safer for energy workers \n - Domestic source of energy",
-        Disadvantages: " - Risk of nuclear accidents \n - Nuclear waste \n - Radioactive explosion ",
-        cost_per_kwh: "0.14",
-        c_cost: "0.13",
-        o_cost: "0.01",
-        co: 13.
-      },
-
-
-      {
-        Name: "Wind",
-        Advantages: "- Affordable \n - Renewable \n - Clean \n - Domestic source of energy \n - Excess power can be sold back to the power company \n - Safer for energy workers",
-        Disadvantages: " - Turbines might cause noise and aesthetic pollution \n - Weather Dependent \n - Uses a Lot of Space",
-        cost_per_kwh: "0.08",
-        c_cost: "0.07",
-        o_cost: "0.01",
-        co: 9.
-
-      },
-
-
-
-      ],
-
-      energy_source_data: {
-        labels: [
-          'Nuclear',
-          'Coal',
-          'Natural Gas',
-          "Hydropower, Biomass, Geothermal",
-          'Solar',
-          'Wind',
-        ],
-        datasets: [{
-          data: [33.1, 19.5, 32.7, 10, .6, 4.1],
-          backgroundColor: [
-            '#E85349',
-            '#ED6472',
-            '#E58E97',
-            '#a8ccdb',
-            '#29ABC9',
-            '#218DA7',
+        energy_source_data: {
+          labels: [
+            'Nuclear',
+            'Coal',
+            'Natural Gas',
+            "Hydropower, Biomass, Geothermal",
+            'Solar',
+            'Wind',
           ],
-          hoverBackgroundColor: [
-            '#c9473e',
-            '#ba4e59',
-            '#b57077',
-            '#9eacb2',
-            '#2088a0',
-            '#1a7084',
-          ]
-        }]
-      },
+          datasets: [{
+            data: [33.1, 19.5, 32.7, 10, .6, 4.1],
+            backgroundColor: [
+              '#E85349',
+              '#ED6472',
+              '#E58E97',
+              '#a8ccdb',
+              '#29ABC9',
+              '#218DA7',
+            ],
+            hoverBackgroundColor: [
+              '#c9473e',
+              '#ba4e59',
+              '#b57077',
+              '#9eacb2',
+              '#2088a0',
+              '#1a7084',
+            ]
+          }]
+        },
 
-  data1: {
-    labels: ['New England',
-'East North Central',
-'West North Central',
-'South Atlantic',
-'East South Central',
-'West South Central',
-'Mountain North',
-'Mountain South',
-'Pacific',],
-  
-  datasets: [
+        data1: {
+          labels: [
+            'New England',
+            'East North Central',
+            'West North Central',
+            'South Atlantic',
+            'East South Central',
+            'West South Central',
+            'Mountain North',
+            'Mountain South',
+            'Pacific',
+          ],
 
-    {
-    label: "Millions of Dollars in Energy Spending",
-      backgroundColor: 'rgba(255,99,132,0.2)',
-      borderColor: 'rgba(255,99,132,1)',
-      borderWidth: 1,
-      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-      hoverBorderColor: 'rgba(255,99,132,1)',
-      data: [(14.31/12*100), (33.36/12*100),
-(31.88/12*100),
-(14.54/12*100),
-(46.09/12*100),
-(13.72/12*100),
-(25.38/12*100),
-(6.74/12*100),
-(7.2/12*100),
-(26.12/12*100)]
-    }
-  ]
-},
+          datasets: [{
+            label: "Millions of Dollars in Energy Spending",
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+            hoverBorderColor: 'rgba(255,99,132,1)',
+            data: [
+              (14.31/12*100), (33.36/12*100),
+              (31.88/12*100),
+              (14.54/12*100),
+              (46.09/12*100),
+              (13.72/12*100),
+              (25.38/12*100),
+              (6.74/12*100),
+              (7.2/12*100),
+              (26.12/12*100)
+            ]
+          }]
+        },
 
-      lightbulb: {
-        quantity: 0
-      },
+        lightbulb: {
+          quantity: 0
+        },
 
-      solarPanelCheckbox: false,
-      upgradeApplianceCheckbox: false,
-      energySavingTipsCheckbox: false,
-      publicTransitCheckbox: false
+        solarPanelCheckbox: false,
+        upgradeApplianceCheckbox: false,
+        energySavingTipsCheckbox: false,
+        publicTransitCheckbox: false
     };
 
     this.zipcodeOnChange = this.zipcodeOnChange.bind(this);
-
     this.lightbulbQuantityOnChange = this.lightbulbQuantityOnChange.bind(this);
     this.lightbulbDurationOnChange = this.lightbulbDurationOnChange.bind(this);
     this.dryingMachineQuantityOnChange = this.dryingMachineQuantityOnChange.bind(this);
@@ -263,8 +247,7 @@ class Main extends Component {
     this.setState({
         data: Object.assign({}, this.state.energy_source_data, {
             datasets: datasetsCopy
-        }),
-        
+        })
     });
   }
 
@@ -392,7 +375,9 @@ class Main extends Component {
     this.setState({
       washingMachineWater: washing_constant,
       washingMachineEnergy: newWashingMachineEnergy,
-      totalHouseEnergy: this.state.totalHouseEnergy + newWashingMachineEnergy - this.state.washingMachineEnergy
+      totalHouseEnergy: this.state.totalHouseEnergy + newWashingMachineEnergy - this.state.washingMachineEnergy,
+      washingMachineColdChecked: (washing_constant == WASHING_MACHINE_COST_COLD) ? true : false,
+      washingMachineHotChecked: (washing_constant == WASHING_MACHINE_COST_HOT) ? true : false
     });
   }
 
@@ -425,29 +410,8 @@ class Main extends Component {
     if(this.state.city_energy_cost < this.state.city_energy_budget) {
       return " electricty costs saved ";
     } else {
-      return " extra electricty costs ";
+      return " extra electricty costs paid ";
     }
-  }
-
-  calculateCO2GlobalImpact() { // Returns in millions of tons of Co2
-    return (this.state.total_co2 * (GLOBAL_CITIES_CONVERSION / 1000.0) * Math.abs(1 - (this.state.total_co2 / this.state.original_co2))).toFixed(1)
-  }
-
-  citySavedCO2Text() {
-    if(this.state.total_co2 < this.state.original_co2) {
-      return "Decrease";
-    } else {
-      return "Increase";
-    }
-  }
-
-  totalChoicesChecked() {
-    var sum = 0
-    let checkboxes = [this.state.energySavingTipsCheckbox, this.state.publicTransitCheckbox, this.state.upgradeApplianceCheckbox, this.state.solarPanelCheckbox];
-    for (var i = checkboxes.length - 1; i >= 0; i--) {
-      if(checkboxes[i]) sum++;
-    }
-    return sum;
   }
 
   // Assume 200,000 cites with same budget
@@ -544,7 +508,7 @@ class Main extends Component {
                 style={styles.section1Utility.inputRange}
                 type="range"
                 min="0"
-                max="100" value={this.state.laptopQuantity}
+                max="15" value={this.state.laptopQuantity}
                 onChange={this.laptopQuantityOnChange}
               /></div>
             <div>&nbsp; {this.state.laptopQuantity} laptop</div>
@@ -746,6 +710,7 @@ class Main extends Component {
                 value="cold"
                 onChange={this.washingMachineWaterOnChange}
                 name="water"
+                checked={this.state.washingMachineColdChecked}
               />
               <label>Cold Water &nbsp;</label>
               <input
@@ -753,6 +718,7 @@ class Main extends Component {
                 type="radio"
                 value="hot"
                 onChange={this.washingMachineWaterOnChange}
+                checked={this.state.washingMachineHotChecked}
                 name="water"
               />
               <label>Hot Water</label>
@@ -854,11 +820,11 @@ class Main extends Component {
     return (
       <Container section="unit-introduction">
         <div style={styles.unitIntroduction.headerContainer}>
-          Introduction: The Lightbulb Unit
+          Introduction: Lightbulb Unit
         </div>
         <HorizontalLine />
         <div style={styles.unitIntroduction.descriptionContainer}>
-          <div style={styles.unitIntroduction.normalTextContainer}>So we're all on the same page, we'll define a new unit of energy called a Lightbulb (<img alt=""src={Image.lightbulb.small} />) </div>
+          <div style={styles.unitIntroduction.normalTextContainer}>We define a super cool new unit of energy called Lightbulb (<img alt=""src={Image.lightbulb.small} />) </div>
           <div style={styles.unitIntroduction.emphasizedText}>1 <img alt=""src={Image.lightbulb.medium} /></div>
           <div style={styles.unitIntroduction.normalTextContainer}>is equivalent to</div>
           <div style={styles.unitIntroduction.emphasizedText}>The amount of energy consumed by<br /> a lightbulb for an hour</div>
@@ -905,7 +871,7 @@ class Main extends Component {
           Calculate Your Monthly Energy Usage
         </div>
         <HorizontalLine section />
-        <div style={styles.universal.smallFont}>Please Approximate Your Daily Routine to Calculate <b>Your Monthly Energy Usage</b></div>
+        <div style={styles.universal.smallFont}>Please Tuning Your Daily Routine to Calculate <b>Your Monthly Energy Usage</b></div>
         <div style={styles.section1Utility.utilityRow}>
           {this.renderLightbulb()}
           {this.renderDryingMachine()}
@@ -1070,6 +1036,9 @@ class Main extends Component {
           Energy Saving Tips
         </div>
         <HorizontalLine section />
+        <div style={{fontSize: Metric.font.size.small, fontWeight: Metric.font.weight.light, color: Color.red, padding: "5px 0"}}>
+          Red color indicates the area you can do better
+        </div>
         <div style={styles.section1Suggestion.utilityRow}>
           <div style={{
             width: "45%",
@@ -1217,11 +1186,10 @@ class Main extends Component {
             </div>
           </div>
         </div>
-        <ContinueButton href="#section2Introduction" narration="Click 'Continue' To Go To Section 2: My City"/>
+        <ContinueButton href="#section2Introduction" />
       </ProgressBarContainer>
     );
   }
-
 
   renderSection2Introduction() {
     return (
@@ -1230,45 +1198,31 @@ class Main extends Component {
           Section 2: My City
         </div>
         <HorizontalLine section />
-         <div style={styles.universal.largeFont_reg}>
-        We have seen how energy choices effect your home, what happens when we make energy choices for our city?
-
-
-
+        <div style={{fontSize: Metric.font.size.extraLarge, fontWeight: Metric.font.weight.medium}}>
+          We have seen how energy choices effect your home, <br />what happens when we make energy choices for our city?
         </div>
         <img alt="" src={Image.city.city_full} />
-                         <div style={styles.universal.mediumFont}>
-                        How much energy do you think your city (with 280,000 housholds) uses per month?
-
-
-
-                </div>
-
-                  <div style={styles.universal.smallFont}>Hint: Your housold total was {this.state.totalHouseEnergy} <img alt=""src={Image.lightbulb.small} /></div>
-
-                <div className="row h-40">
-
-
-                <span className="col-sm-4">
-
-
-
-          <QuizButton href="#section2Quiz" text="Less than 1 Billion "/>
-          </span>
-          <span className="col-sm-4">
-
-
-          <QuizButton href="#section2Quiz" text="Between 1 and 5 Billion"/>
-          </span> 
-
-          <span className="col-sm-4">
-            <QuizButton href="#section2Quiz" text="More than 5 Billion"/>
-          </span>
+        <div style={styles.universal.mediumFont}>
+          How much energy do you think your city (with 280,000 housholds) uses per month?
         </div>
-      </ProgressBarContainer>
+
+        <div style={{fontSize: Metric.font.size.medium, fontWeight: Metric.font.weight.regular}}>
+          Hint: Your household total was {this.state.totalHouseEnergy} <img alt=""src={Image.lightbulb.small} />
+        </div>
+        <div className="row h-40">
+          <span className="col-sm-4">
+            <QuizButton href="#section2Quiz" text="Less than 1 Billion "/>
+          </span>
+          <span className="col-sm-4">
+            <QuizButton href="#section2Quiz" text="Between 1 and 5 Billion"/>
+          </span>
+          <span className="col-sm-4">
+            <QuizButton href="#section2Quiz" text="More than 5 Billion" />
+          </span >
+        </div>
+        </ProgressBarContainer>
     );
   }
-
 
 
 
@@ -1280,25 +1234,20 @@ class Main extends Component {
         </div>
         <HorizontalLine section />
 
-                 <div style={styles.universal.largeFont_reg}>
-        On average, your city uses an estimated 4.4 Billion <img alt=""src={Image.lightbulb.medium} /> of energy per month for a total cost of ${ this.state.city_energy_budget }M
-
-
-
+        <div style={styles.universal.largeFont_reg}>
+          On average, your city uses an estimated 4.4 Billion <img alt=""src={Image.lightbulb.medium} /> of energy per month for a total cost of ${ this.state.city_energy_budget }M
         </div>
-                <HorizontalLine section />
 
+        <div className="row ">
+          <span className="col-sm-6">
+            <Bar data={this.state.data1} />
+          </span>
 
-              <div className="row ">
-        <span className="col-sm-6">
-
-        <Bar data={this.state.data1} />
-        </span>
-
-        <span className="col-sm-6">
-
-         <div style={styles.universal.mediumFont}>Average monthy energy spending in the U.S. is ${(219.34/12).toFixed(2)} Billion. This graph shows the geographic breakdown of that spending.</div>
-        </span>
+          <span className="col-sm-6">
+            <div style={{fontSize: Metric.font.size.large, fontWeight: Metric.font.weight.medium, textAlign: "justify"}}>
+              Average monthy energy spending in the U.S. is ${(219.34/12).toFixed(2)} Billion. This graph shows the geographic breakdown of that spending.
+            </div>
+          </span>
         </div>
 
         <ContinueButton href="#section2Doughnut" />
@@ -1313,231 +1262,219 @@ class Main extends Component {
 
     return (
     <ProgressBarContainer section="section2Doughnut" progress="home">
-      <div style={styles.universal.sectionHeadline}>
-        My City's Energy Sources: Financial Breakdown 
+      <div style={styles.universal.sectionHeadlineSub}>
+        My City's Energy Sources: Financial Breakdown
       </div>
       <HorizontalLine section />
       <div className="row ">
         <span className="col-sm-4">
           <div className="row">
-            <Doughnut data={this.state.energy_source_data} width="80%" height="80%"
-            onElementsClick={(elem) => 
-
-            { if (elem.length > 0) {
-              var s = false
-              var updated_cost = 0
-              console.log()
-              var energySourceDataCopy = this.state.energy_source_data;
-              energySourceDataCopy.datasets[0]["data"][elem[0]["_index"]] *= 1.1;
-              var total = 0
-              for (var i = 0; i < energySourceDataCopy.datasets[0]["data"].length; i++) {
-              total+= energySourceDataCopy.datasets[0]["data"][i];
-            }
-            for (var j = 0; j < energySourceDataCopy.datasets[0]["data"].length; j++) {
-            energySourceDataCopy.datasets[0]["data"][j]/= total;
-            updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265
-
-          }
-          this.setState({city_energy_cost: updated_cost.toFixed(2)})
-          this.setState({current_source: Object.assign({}, this.state.energy_data_details[elem[0]["_index"]])});
-          this.state.shouldHide = false
-          this.setState({energy_source_data: Object.assign({}, energySourceDataCopy)});
-          this.setState({shouldHide: s});
-        }
-      }} />
-    </div>
+            <Doughnut
+              data={this.state.energy_source_data}
+              width="80%"
+              height="80%"
+              onElementsClick={(elem) =>
+              { if (elem.length > 0) {
+                var s = false
+                var updated_cost = 0
+                console.log()
+                var energySourceDataCopy = this.state.energy_source_data;
+                energySourceDataCopy.datasets[0]["data"][elem[0]["_index"]] *= 1.1;
+                var total = 0
+                for (var i = 0; i < energySourceDataCopy.datasets[0]["data"].length; i++) {
+                  total+= energySourceDataCopy.datasets[0]["data"][i];
+                }
+                for (var j = 0; j < energySourceDataCopy.datasets[0]["data"].length; j++) {
+                  energySourceDataCopy.datasets[0]["data"][j]/= total;
+                  updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265
+                }
+                this.setState({city_energy_cost: updated_cost.toFixed(2)})
+                this.setState({current_source: Object.assign({}, this.state.energy_data_details[elem[0]["_index"]])});
+                this.state.shouldHide = false
+                this.setState({energy_source_data: Object.assign({}, energySourceDataCopy)});
+                this.setState({shouldHide: s});
+              }
+            }} />
+          </div>
     <div className="row">
-      <div style={styles.universal.grey_box}> 
-        Click on the  energy sources in this graph to learn the facts about each source 
+      <div style={styles.universal.grey_box}>
+        Click on the  energy sources in this graph to learn the facts about each source
       </div>
     </div>
-
   </span>
-  <span className="col-sm-6">
-    <div style={styles.universal.mediumFont}>Monthy Energy Consuption:</div>
-    <div style={styles.universal.smallFont}>
+  <span className="col-sm-8 ">
+    <div style={{fontSize: Metric.font.size.large, fontWeight: Metric.font.weight.bold}}>Monthly Energy Consumption:</div>
+    <div style={{fontSize: Metric.font.size.medium, fontWeight: Metric.font.weight.regular}}>
       City Budget: ${ this.state.city_energy_budget }M
-
       | Total Cost: ${ this.state.city_energy_cost }M
+      <div style={styles.universal.smallFont}> Total Savings:
+        <p style={this.state.city_energy_budget - this.state.city_energy_cost >=0 ? styles.universal.smallFont_positive : styles.universal.smallFont_negative}> ${ (this.state.city_energy_budget - this.state.city_energy_cost).toFixed(2) }M
+        </p></div>
 
-      <div style={styles.universal.smallFont}> Total Savings: 
-        <p style={this.state.city_energy_budget - this.state.city_energy_cost >=0 ? styles.universal.smallFont_positive : styles.universal.smallFont_negative}> ${ (this.state.city_energy_budget - this.state.city_energy_cost).toFixed(2) }M 
-        </p></div> 
-        
-
-
-
-        <div style={this.state.shouldHide ? {display: 'none'} : styles.universal.grey_box }> 
-          <p style={styles.universal.largeFont_reg}> {this.state.current_source["Name"]} </p>
+        <div style={this.state.shouldHide ? {display: 'none'} : styles.universal.grey_box }>
+          <p style={{fontSize: Metric.font.size.large, fontWeight: Metric.font.weight.regular, marginBottom: "0"}}> {this.state.current_source["Name"]} </p>
           <div className="row ">
-            <span className="col-sm-4">
-              <p style={styles.universal.smallFont_left}>         <p style={styles.universal.smallFont_positive}> 
-
+            <span className="col-sm-4" style={{padding: "0 10px"}}>
+              <p style={styles.universal.smallFont_left}>         <p style={styles.universal.smallFont_positive}>
               Advantages:  </p>{nl2br(this.state.current_source["Advantages"])}
             </p></span>
-            <span className="col-sm-4">
-             <p style={styles.universal.smallFont_left}>        
-               <p style={styles.universal.smallFont_negative}> 
-
-
-               Disadvantages: </p>{nl2br(this.state.current_source["Disadvantages"])}
-             </p>
-           </span>
-           <span className="col-sm-4">
-             <p style={styles.universal.smallFont_left}>     
-              <p style={styles.universal.smallFont_bold}> 
-              Total Cost: ${this.state.current_source["cost_per_kwh"]}/KWH</p> 
+           <span className="col-sm-4" style={{padding: "0 10px"}}>
+            <p style={styles.universal.smallFont_left}>
+              <p style={styles.universal.smallFont_negative}>
+              Disadvantages:
+              </p>
+              {nl2br(this.state.current_source["Disadvantages"])}
+            </p>
+          </span>
+           <span className="col-sm-4" style={{padding: "0 10px"}}>
+             <p style={styles.universal.smallFont_left}>
+              <p style={styles.universal.smallFont_bold}>
+              Total Cost: ${this.state.current_source["cost_per_kwh"]}/KWH</p>
               Infrastructure Cost: ${this.state.current_source["c_cost"]}/KWH
               <br/>
               Fuel Generation Cost: ${this.state.current_source["o_cost"]} /KWH
             </p>
           </span>
-
         </div>
-        
-      </div> 
 
-
+      </div>
     </div>
-
-
   </span>
 </div>
-<ContinueButton href="#Section2Eco" />
+<ContinueButton href="#section2Eco" />
 </ProgressBarContainer>
     );
   }
 
   renderSection2Eco() {
     return (
-      <ProgressBarContainer section="Section2Eco" progress="city">
+      <ProgressBarContainer section="section2Eco" progress="city">
         <div style={styles.universal.sectionHeadline}>
-          My City: Environmental Impacts 
+          My City: Environmental Impacts
         </div>
         <HorizontalLine section />
-         <div style={styles.universal.largeFont_reg}>
-        What happens when we factor environmental impacts into the energy decisions for our city?
-
-
-
+        <div style={styles.universal.largeFont_reg}>
+          What happens when we factor environmental impacts into the energy decisions for our city?
         </div>
-<img alt="" src={Image.city.city_full} />
-                 <div style={styles.universal.mediumFont}>
-                Energy sources contribute differently to harmful emissions. Let's explore. </div>
-
-
-<ContinueButton href="#section2DoughnutEco" />
-
+        <img alt="" src={Image.city.city_full} />
+        <div style={styles.universal.mediumFont}>
+            Energy sources contribute differently to harmful emissions. Let's explore.
+        </div>
+        <ContinueButton href="#section2DoughnutEco" />
       </ProgressBarContainer>
     );
   }
 
-
   renderSection2DoughnutEco() {
 
     return (
-    <ProgressBarContainer section="#section2DoughnutEco" progress="home">
-      <div style={styles.universal.sectionHeadline}>
-        My City's Energy Sources: Financial Breakdown 
-      </div>
-      <HorizontalLine section />
-      <div className="row ">
-        <span className="col-sm-4">
-          <div className="row">
-            <Doughnut data={this.state.energy_source_data} width="80%" height="80%"
-            onElementsClick={(elem) => 
-
-            { if (elem.length > 0) {
-              var s = false
-              var updated_cost = 0
-              var updated_co2 = 0
-              console.log()
-              var energySourceDataCopy = this.state.energy_source_data;
-              energySourceDataCopy.datasets[0]["data"][elem[0]["_index"]] *= 1.1;
-              var total = 0
-              for (var i = 0; i < energySourceDataCopy.datasets[0]["data"].length; i++) {
-              total+= energySourceDataCopy.datasets[0]["data"][i];
-            }
-            for (var j = 0; j < energySourceDataCopy.datasets[0]["data"].length; j++) {
-            energySourceDataCopy.datasets[0]["data"][j]/= total;
-            updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265
-            
-
-            updated_co2 +=this.state.co[j]*energySourceDataCopy.datasets[0]["data"][j]*265 
-
-
-          }
-          this.setState({city_energy_cost: updated_cost.toFixed(2)})
-          this.setState({current_source: Object.assign({}, this.state.energy_data_details[elem[0]["_index"]])});
-          this.state.shouldHide = false
-          this.setState({energy_source_data: Object.assign({}, energySourceDataCopy)});
-          this.setState({shouldHide: s})
-          this.setState({total_co2: updated_co2});
-        }
-      }} />
-    </div>
-    <div className="row">
-      <div style={styles.universal.grey_box}> 
-        Click on the energy sources in this graph to learn the facts about each source 
-      </div>
-    </div>
-
-  </span>
-  <span className="col-sm-6">
-    <div style={styles.universal.mediumFont}>Monthy Energy Consuption:</div>
-    <div style={styles.universal.smallFont}>
-      City Budget: ${ this.state.city_energy_budget }M
-
-      | Total Cost: ${ this.state.city_energy_cost }M
-
-      <div style={styles.universal.smallFont}> Total Savings: 
-        <p style={this.state.city_energy_budget - this.state.city_energy_cost >=0 ? styles.universal.smallFont_positive : styles.universal.smallFont_negative}> ${ (this.state.city_energy_budget - this.state.city_energy_cost).toFixed(2) }M 
-        </p></div> 
-        
-
-        <p style={(this.state.total_co2 - this.state.original_co2) >=0 ?  styles.universal.smallFont_negative : styles.universal.smallFont_positive}> 
-         New Co2 Contributions: {(this.state.total_co2 - this.state.original_co2).toFixed(2)} Tons</p>
-
-        <div style={this.state.shouldHide ? {display: 'none'} : styles.universal.grey_box }> 
-          <p style={styles.universal.largeFont_reg}> {this.state.current_source["Name"]} </p>
-          <div className="row ">
-            <span className="col-sm-4">
-              <p style={styles.universal.smallFont_left}>         <p style={styles.universal.smallFont_positive}> 
-
-              Advantages:  </p>{nl2br(this.state.current_source["Advantages"])}
-            </p></span>
-            <span className="col-sm-4">
-             <p style={styles.universal.smallFont_left}>        
-               <p style={styles.universal.smallFont_negative}> 
-
-
-               Disadvantages: </p>{nl2br(this.state.current_source["Disadvantages"])}
-             </p>
-           </span>
-           <span className="col-sm-4">
-             <p style={styles.universal.smallFont_left}>     
-              <p style={styles.universal.smallFont_bold}> 
-              Total Cost: ${this.state.current_source["cost_per_kwh"]}/KWH</p> 
-              Infrastructure Cost: ${this.state.current_source["c_cost"]}/KWH
-              <br/>
-              Fuel Generation Cost: ${this.state.current_source["o_cost"]} /KWH
-            <br/>
-             
-            </p>
-          </span>
-
+      <ProgressBarContainer section="section2DoughnutEco" progress="home">
+        <div style={styles.universal.sectionHeadlineSub}>
+          My City's Energy Sources: Financial Breakdown
         </div>
-        
-      </div> 
+        <HorizontalLine section />
+        <div className="row ">
+          <span className="col-sm-4">
+            <div className="row">
+              <Doughnut
+                data={this.state.energy_source_data}
+                width="80%"
+                height="80%"
+                onElementsClick={(elem) => {
+                  if (elem.length > 0) {
+                    var s = false
+                    var updated_cost = 0
+                    var updated_co2 = 0
+                    var energySourceDataCopy = this.state.energy_source_data;
+                    energySourceDataCopy.datasets[0]["data"][elem[0]["_index"]] *= 1.1;
+                    var total = 0
+                    for (var i = 0; i < energySourceDataCopy.datasets[0]["data"].length; i++) {
+                      total+= energySourceDataCopy.datasets[0]["data"][i];
+                    }
 
+                    for (var j = 0; j < energySourceDataCopy.datasets[0]["data"].length; j++) {
+                      energySourceDataCopy.datasets[0]["data"][j]/= total;
+                      updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265
+                      updated_co2 +=this.state.co[j]*energySourceDataCopy.datasets[0]["data"][j]*265
+                    }
+                  this.setState({
+                    city_energy_cost: updated_cost.toFixed(2),
+                    current_source: Object.assign({}, this.state.energy_data_details[elem[0]["_index"]]),
+                    shouldHide: false,
+                    energy_source_data: Object.assign({}, energySourceDataCopy),
+                    shouldHide: s,
+                    total_co2: updated_co2
+                  });
+                }
+              }} />
+            </div>
+            <div className="row">
+              <div style={styles.universal.grey_box}>
+                Click on the energy sources in this graph to learn the facts about each source
+              </div>
+            </div>
+          </span>
+          <span className="col-sm-8">
+            <div style={{fontSize: Metric.font.size.large, fontWeight: Metric.font.weight.bold}}>Monthy Energy Consumption:</div>
+            <div style={{fontSize: Metric.font.size.medium, fontWeight: Metric.font.weight.regular}}>
+              City Budget: ${ this.state.city_energy_budget }M
+              | Total Cost: ${ this.state.city_energy_cost }M
+              <div style={styles.universal.smallFont}> Total Savings:
+                <p style={this.state.city_energy_budget - this.state.city_energy_cost >=0 ? styles.universal.smallFont_positive : styles.universal.smallFont_negative}>
+                  ${ (this.state.city_energy_budget - this.state.city_energy_cost).toFixed(2) }M
+                </p>
+              </div>
 
+              <p style={(this.state.total_co2 - this.state.original_co2) >=0 ?  styles.universal.smallFont_negative : styles.universal.smallFont_positive}>
+                New CO<sub>2</sub> Contributions: {(this.state.total_co2 - this.state.original_co2).toFixed(2)} Tons
+              </p>
+
+              <div style={this.state.shouldHide ? {display: 'none'} : {
+                fontSize: Metric.font.size.medium,
+                fontWeight: Metric.font.weight.regular,
+                margin: "0 0",
+                backgroundColor: "#C9DAE1",
+                padding: "30px",
+                borderRadius: "25px"
+              } }>
+                <p style={{fontSize: Metric.font.size.large, fontWeight: Metric.font.weight.regular, marginBottom: "0"}}> {this.state.current_source["Name"]} </p>
+                <div className="row ">
+                  <span className="col-sm-4" style={{padding: "0 10px"}}>
+                    <p style={styles.universal.smallFont_left}>
+                      <p style={styles.universal.smallFont_positive}>
+                        Advantages:
+                      </p>
+                      {nl2br(this.state.current_source["Advantages"])}
+                    </p>
+                  </span>
+
+                  <span className="col-sm-4" style={{padding: "0 10px"}}>
+                   <p style={styles.universal.smallFont_left}>
+                     <p style={styles.universal.smallFont_negative}>
+                     Disadvantages:
+                     </p>
+                     {nl2br(this.state.current_source["Disadvantages"])}
+                   </p>
+                 </span>
+
+                 <span className="col-sm-4" style={{padding: "0 10px"}}>
+                   <p style={styles.universal.smallFont_left}>
+                    <p style={styles.universal.smallFont_bold}>
+                      Total Cost: ${this.state.current_source["cost_per_kwh"]}/KWH
+                    </p>
+                    Infrastructure Cost: ${this.state.current_source["c_cost"]}/KWH
+                    <br/>
+                    Fuel Generation Cost: ${this.state.current_source["o_cost"]} /KWH
+                    <br/>
+                  </p>
+                </span>
+            </div>
+          </div>
+        </div>
+      </span>
     </div>
-
-
-  </span>
-</div>
-<ContinueButton href="#section3Comparison" />
-</ProgressBarContainer>
+    <ContinueButton href="#section3Comparison" />
+    </ProgressBarContainer>
     );
   }
 
@@ -1555,27 +1492,26 @@ class Main extends Component {
         <div className="row" style={styles.universal.mediumFont}>
          <span className="col-sm-6" style={styles.section3Comparison.listText}>
           If every house were like my house...
-          <ul>
-            <li>{(100 * (parseFloat(this.state.totalHouseEnergy) / NEIGHBOUR.TOTAL)).toFixed(1)}% of current average <img alt=""src={Image.lightbulb.medium} /> used per month</li>
-            <li>{this.calculateHouseholdGlobalImpact()} trillion <img alt=""src={Image.lightbulb.medium} /> {this.householdSavedText()} per month</li>
-            <li>Prevent 0.5° C of temperature increase by 2050</li>
+          <ul style={{fontWeight: Metric.font.weight.regular, fontSize: Metric.font.size.medium}}>
+            <li style={{marginTop: "20px"}}><b style={{fontSize: Metric.font.size.large}}>{(100 * (parseFloat(this.state.totalHouseEnergy) / NEIGHBOUR.TOTAL)).toFixed(1)}%</b> of current average <img alt=""src={Image.lightbulb.small} /> used per month</li>
+            <li style={{marginTop: "20px"}}><b style={{fontSize: Metric.font.size.large}}>{this.calculateHouseholdGlobalImpact()} trillion</b> <img alt=""src={Image.lightbulb.medium} /> {this.householdSavedText()} per month</li>
+            <li style={{marginTop: "20px"}}>Prevent <b style={{fontSize: Metric.font.size.large}}>0.5° C</b> of temperature increase by 2050</li>
           </ul>
          </span>
          <span className="col-sm-6" style={styles.section3Comparison.listText}>
           If every city were like my city...
           <div>
-            <Doughnut data={this.state.energy_source_data}/> 
+            <Doughnut data={this.state.energy_source_data}/>
           </div>
-          <ul>
-            <li>${this.calculateCityGlobalImpact()} billion in {this.citySavedText()} monthly</li>
-            <li>{this.citySavedCO2Text()} monthly Co2 emissions by {this.calculateCO2GlobalImpact()} million tons</li>
-            <li>Prevent 1° C of temperature increase by 2050</li>
+          <ul style={{fontWeight: Metric.font.weight.regular, fontSize: Metric.font.size.medium}}>
+            <li style={{marginTop: "20px"}}><b style={{fontSize: Metric.font.size.large}}>${this.calculateCityGlobalImpact()} billion</b> in {this.citySavedText()} monthly</li>
+            <li style={{marginTop: "20px"}}>Prevent <b style={{fontSize: Metric.font.size.large}}>1° C</b> of temperature increase by 2050</li>
           </ul>
          </span>
         </div>
         <ContinueButton href="#section3Choices" />
       </ProgressBarContainer>
-    )
+    );
   }
 
   renderSection3Choies() {
@@ -1588,84 +1524,66 @@ class Main extends Component {
         <div style={styles.universal.largeFont}>
           What will you do to save?
         </div>
-
-        <div style={styles.universal.smallFont}>
-          Click on each option to learn more.
+        <div style={styles.section3Choices.checkboxContainer}>
+          <img
+            style={styles.section3Choices.checkbox}
+            alt=""
+            src={this.state.solarPanelCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
+            onClick={() => {this.setState({solarPanelCheckbox: !this.state.solarPanelCheckbox});}}
+          />
+          <a
+            style={styles.section3Choices.checkboxText}
+            href="https://news.energysage.com/compare-solar-panel-prices-california/"
+            target="_blank"
+          >
+            Install solar panels
+          </a>
         </div>
-
-        <div className="row" style={styles.universal.mediumFont}>
-         <span className="col-sm-6" style={styles.section3Comparison.listText}>
-            <div style={styles.section3Choices.checkboxContainer}>
-              <img
-                style={styles.section3Choices.checkbox}
-                alt=""
-                src={this.state.solarPanelCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
-                onClick={() => {this.setState({solarPanelCheckbox: !this.state.solarPanelCheckbox});}}
-              />
-              <a
-                style={styles.section3Choices.checkboxText}
-                href="https://news.energysage.com/compare-solar-panel-prices-california/"
-                target="_blank"
-              >
-                Install solar panels
-              </a>
-            </div>
-
-            <div style={styles.section3Choices.checkboxContainer}>
-              <img
-                style={styles.section3Choices.checkbox}
-                alt=""
-                src={this.state.upgradeApplianceCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
-                onClick={() => {this.setState({upgradeApplianceCheckbox: !this.state.upgradeApplianceCheckbox});}}
-              />
-              <a
-                style={styles.section3Choices.checkboxText}
-                href="https://www.energyupgradeca.org/home-energy-efficiency/appliances/"
-                target="_blank"
-              >
-                Upgrade my appliances
-              </a>
-            </div>
-              <div style={styles.section3Choices.checkboxContainer}>
-              <img
-                style={styles.section3Choices.checkbox}
-                alt=""
-                src={this.state.energySavingTipsCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
-                onClick={() => {this.setState({energySavingTipsCheckbox: !this.state.energySavingTipsCheckbox});}}
-              />
-              <a
-                style={styles.section3Choices.checkboxText}
-                href="https://www.energyupgradeca.org/home-energy-efficiency/upgrading-your-home/"
-                target="_blank"
-              >
-                Follow energy saving tips
-              </a>
-              </div>
-              <div style={styles.section3Choices.checkboxContainer}>
-              <img
-                style={styles.section3Choices.checkbox}
-                alt=""
-                src={this.state.publicTransitCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
-                onClick={() => {this.setState({publicTransitCheckbox: !this.state.publicTransitCheckbox});}}
-              />
-              <a
-                style={styles.section3Choices.checkboxText}
-                href="http://www.iliveinthebayarea.com/knowledge-center/transit/"
-                target="_blank"
-              >
-                Take more public transit
-              </a>
-              </div>
-
-            </span>
-            <span className="col-sm-6">
-              Savings:
-              <img alt=""src={Image.lightbulb.medium} width={50 * this.totalChoicesChecked()} height={50 * this.totalChoicesChecked()} />
-            </span>
-
-          </div>  
-
-
+        <div style={styles.section3Choices.checkboxContainer}>
+          <img
+            style={styles.section3Choices.checkbox}
+            alt=""
+            src={this.state.upgradeApplianceCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
+            onClick={() => {this.setState({upgradeApplianceCheckbox: !this.state.upgradeApplianceCheckbox});}}
+          />
+          <a
+            style={styles.section3Choices.checkboxText}
+            href="https://www.energyupgradeca.org/home-energy-efficiency/appliances/"
+            target="_blank"
+          >
+            Upgrade my appliances
+          </a>
+        </div>
+          <div style={styles.section3Choices.checkboxContainer}>
+          <img
+            style={styles.section3Choices.checkbox}
+            alt=""
+            src={this.state.energySavingTipsCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
+            onClick={() => {this.setState({energySavingTipsCheckbox: !this.state.energySavingTipsCheckbox});}}
+          />
+          <a
+            style={styles.section3Choices.checkboxText}
+            href="https://www.energyupgradeca.org/home-energy-efficiency/upgrading-your-home/"
+            target="_blank"
+          >
+            Follow energy saving tips
+          </a>
+          </div>
+          <div style={styles.section3Choices.checkboxContainer}>
+          <img
+            style={styles.section3Choices.checkbox}
+            alt=""
+            src={this.state.publicTransitCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
+            onClick={() => {this.setState({publicTransitCheckbox: !this.state.publicTransitCheckbox});}}
+          />
+          <a
+            style={styles.section3Choices.checkboxText}
+            href="http://www.iliveinthebayarea.com/knowledge-center/transit/"
+            target="_blank"
+          >
+            Take more public transit
+          </a>
+          </div>
         <ContinueButton href="#lastPage" />
       </ProgressBarContainer>
     );
@@ -1703,21 +1621,21 @@ class Main extends Component {
   render() {
     return (
       <div style={{height: "100%"}}>
-        {this.renderHomePage()}
-        {this.renderQuestionIntroduction()}
-        {this.renderUnitIntroduction()}
-        {this.renderSection1Introduction()}
-        {this.renderSection1Utility()}
-        {this.renderSection1CompareResult()}
-        {this.renderSection1Suggestion()}
-        {this.renderSection2Introduction()}
-        {this.renderSection2Quiz()}
-        {this.renderSection2Doughnut()}
-        {this.renderSection2Eco()}
-        {this.renderSection2DoughnutEco()}
-        {this.renderSection3Comparison()}
-        {this.renderSection3Choies()}
-        {this.renderConclusion()}
+      {this.renderHomePage()}
+      {this.renderQuestionIntroduction()}
+      {this.renderUnitIntroduction()}
+      {this.renderSection1Introduction()}
+      {this.renderSection1Utility()}
+      {this.renderSection1CompareResult()}
+      {this.renderSection1Suggestion()}
+      {this.renderSection2Introduction()}
+      {this.renderSection2Quiz()}
+      {this.renderSection2Doughnut()}
+      {this.renderSection2Eco()}
+      {this.renderSection2DoughnutEco()}
+      {this.renderSection3Comparison()}
+      {this.renderSection3Choies()}
+      {this.renderConclusion()}
       </div>
     );
   }
@@ -1732,15 +1650,20 @@ const styles = {
       fontSize: Metric.font.size.headline,
       color: Color.headline,
       textAlign: "center"
-    }, 
+    },
+    sectionHeadlineSub: {
+      fontFamily: Metric.font.family.headline,
+      fontSize: Metric.font.size.extraLarge,
+      color: Color.headline,
+      textAlign: "center"
+    },
     smallFont: {
       fontSize: Metric.font.size.medium,
       fontWeight: Metric.font.weight.regular,
       margin: "30px 0"
     },
-
     smallFont_left: {
-      fontSize: Metric.font.size.medium,
+      fontSize: Metric.font.size.small,
       fontWeight: Metric.font.weight.regular,
       margin: "30px 0",
       textAlign: "left",
@@ -1750,7 +1673,6 @@ const styles = {
       fontWeight: Metric.font.weight.medium,
       margin: "30px 0"
     },
-
     mediumFont_bold: {
       fontSize: Metric.font.size.large,
       fontWeight: Metric.font.weight.bold,
@@ -1764,27 +1686,21 @@ const styles = {
     largeFont_reg: {
       fontSize: Metric.font.size.extraLarge,
       fontWeight: Metric.font.weight.regular,
-      margin: "30px 0"
+      margin: "30px 0",
     },
-
     smallFont_negative: {
       fontSize: Metric.font.size.medium,
       fontWeight: Metric.font.weight.bold,
-      color: "#E85349"
-
+      color: "#E85349",
     },
-
     smallFont_positive: {
       fontSize: Metric.font.size.medium,
       fontWeight: Metric.font.weight.bold,
       color: "#3CB371"
-
     },
-
     smallFont_bold: {
       fontSize: Metric.font.size.medium,
       fontWeight: Metric.font.weight.bold,
-
     },
     grey_box: {
       fontSize: Metric.font.size.medium,
@@ -1793,7 +1709,6 @@ const styles = {
       backgroundColor: "#C9DAE1",
       padding: "30px",
       borderRadius: "25px"
-
     },
   },
 
@@ -1991,12 +1906,11 @@ const styles = {
     },
     checkboxText: {
       paddingLeft: "40px",
-      color: Color.black,
       fontSize: Metric.font.size.medium,
-      weight: Metric.font.weight.medium
+      weight: Metric.font.weight.medium,
+      textDecoration: "underline"
     }
   }
-
 }
 
 

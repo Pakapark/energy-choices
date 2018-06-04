@@ -2,9 +2,7 @@
   Component: ContinueButton
   Basic Funtionality:
     <ContinueButton href="#id" />
-
   Note that #id must match the id of other containers
-
   You can add narration to tell user what to be expected next by using
     <ContainerButton href="#id" narration="some narration" />
 */
@@ -50,7 +48,7 @@ const styles = {
   buttonContainer: {
     display: "block",
     margin: Metric.continueButton.margin,
-    width: "80%"
+    width: "85%"
   },
   buttonStyle: {
     ...Metric.continueButton,
