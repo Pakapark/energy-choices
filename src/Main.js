@@ -17,6 +17,8 @@ const WASHING_MACHINE_COST_HOT = 48;
 const CAR_COST = 23;
 const HEATER_CONSTANT = 250;
 const AC_CONSTANT = 50;
+const GLOBAL_ELECTRICITY_USAGE = 152.25; // In trillion bulbs per month
+const GLOBAL_CITIES_CONVERSION = 200; // Converts to trillions of dollars
 
 const NEIGHBOUR = {
   LIGHTBULB: 3000,
@@ -288,6 +290,32 @@ class Main extends Component {
       totalHouseEnergy: this.state.totalHouseEnergy + newCarMileEnergy - this.state.carEnergy
     });
   }
+
+  calculateHouseholdGlobalImpact() {
+    return Math.abs(GLOBAL_ELECTRICITY_USAGE * (1 - (parseFloat(this.state.totalHouseEnergy) / NEIGHBOUR.TOTAL))).toFixed(2); // TODO: unit convert
+  }
+
+  householdSavedText() {
+    if(this.state.totalHouseEnergy < NEIGHBOUR.TOTAL) {
+      return "saved";
+    } else {
+      return "more consumed";
+    }
+  }
+
+  calculateCityGlobalImpact() {
+    return (this.state.city_energy_cost * GLOBAL_CITIES_CONVERSION * Math.abs(1 - (this.state.city_energy_cost / this.state.city_energy_budget))).toFixed(1); // in billions
+  }
+
+  citySavedText() {
+    if(this.state.city_energy_cost < this.state.city_energy_budget) {
+      return " electricty costs saved ";
+    } else {
+      return " extra electricty costs paid ";
+    }
+  }
+
+  // Assume 200,000 cites with same budget
 
   renderLightbulb() {
     return (
@@ -691,11 +719,11 @@ class Main extends Component {
     return (
       <Container section="unit-introduction">
         <div style={styles.unitIntroduction.headerContainer}>
-          Introduction: Lightbulb Unit
+          Introduction: The Lightbulb Unit
         </div>
         <HorizontalLine />
         <div style={styles.unitIntroduction.descriptionContainer}>
-          <div style={styles.unitIntroduction.normalTextContainer}>We define a super cool new unit of energy called Lightbulb (<img alt=""src={Image.lightbulb.small} />) </div>
+          <div style={styles.unitIntroduction.normalTextContainer}>So we're all on the same page, we'll define a new unit of energy called a Lightbulb (<img alt=""src={Image.lightbulb.small} />) </div>
           <div style={styles.unitIntroduction.emphasizedText}>1 <img alt=""src={Image.lightbulb.medium} /></div>
           <div style={styles.unitIntroduction.normalTextContainer}>is equivalent to</div>
           <div style={styles.unitIntroduction.emphasizedText}>The amount of energy consumed by<br /> a lightbulb for an hour</div>
@@ -1145,25 +1173,45 @@ class Main extends Component {
         </div>
             </span>
         </div>
-
-
-        <ContinueButton href="#section3Introduction" />
+        <ContinueButton href="#section3Comparison" />
       </ProgressBarContainer>
     );
   }
 
 
-  renderSection3Introduction() {
+  renderSection3Comparison() {
     return (
-      <ProgressBarContainer section="section3Introduction" progress="world">
+      <ProgressBarContainer section="section3Comparison" progress="world">
         <div style={styles.universal.sectionHeadline}>
           Section 3: My World
         </div>
         <HorizontalLine section />
-        Introduction
+        <div style={styles.universal.largeFont}>
+          So, what does this mean for the planet?
+        </div>
+        <div className="row" style={styles.universal.mediumFont}>
+         <span className="col-sm-6" style={styles.section3Comparison.listText}>
+          If every house were like my house...
+          <ul>
+            <li>{(100 * (parseFloat(this.state.totalHouseEnergy) / NEIGHBOUR.TOTAL)).toFixed(1)}% of current average <img alt=""src={Image.lightbulb.medium} /> used per month</li>
+            <li>{this.calculateHouseholdGlobalImpact()} trillion <img alt=""src={Image.lightbulb.medium} /> {this.householdSavedText()} per month</li>
+            <li>Prevent 0.5° C of temperature increase by 2050</li>
+          </ul>
+         </span>
+         <span className="col-sm-6" style={styles.section3Comparison.listText}>
+          If every city were like my city...
+          <div>
+            <Doughnut data={this.state.energy_source_data}/> 
+          </div>
+          <ul>
+            <li>${this.calculateCityGlobalImpact()} billion in {this.citySavedText()} monthly</li>
+            <li>Prevent 1° C of temperature increase by 2050</li>
+          </ul>
+         </span>
+        </div>
         <ContinueButton href="#section3Choices" />
       </ProgressBarContainer>
-    );
+    )
   }
 
   renderSection3Choies() {
@@ -1285,7 +1333,7 @@ class Main extends Component {
         {this.renderSection2Introduction()}
         {this.renderSection2Quiz()}
         {this.renderSection2Doughnut()}
-        {this.renderSection3Introduction()}
+        {this.renderSection3Comparison()}
         {this.renderSection3Choies()}
         {this.renderConclusion()}
       </div>
@@ -1495,6 +1543,11 @@ const styles = {
     utilityHeader: {
       fontSize: Metric.font.size.medium,
       fontWeight: Metric.font.weight.medium
+    }
+  },
+  section3Comparison: {
+    listText: {
+      textAlign: "left"
     }
   },
   section3Choices: {
