@@ -1328,7 +1328,7 @@ class Main extends Component {
     </div>
     <div className="row">
       <div style={styles.universal.grey_box}> 
-        Click on the the energy sources in this graph to learn the facts about each source 
+        Click on the  energy sources in this graph to learn the facts about each source 
       </div>
     </div>
 
@@ -1443,7 +1443,7 @@ class Main extends Component {
             updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265
             
 
-            updated_co2 +=this.state.co[j]*energySourceDataCopy.datasets[0]["data"][j]*265 Tons
+            updated_co2 +=this.state.co[j]*energySourceDataCopy.datasets[0]["data"][j]*265 
 
 
           }
@@ -1458,7 +1458,7 @@ class Main extends Component {
     </div>
     <div className="row">
       <div style={styles.universal.grey_box}> 
-        Click on the the energy sources in this graph to learn the facts about each source 
+        Click on the energy sources in this graph to learn the facts about each source 
       </div>
     </div>
 
@@ -1476,7 +1476,7 @@ class Main extends Component {
         
 
         <p style={(this.state.total_co2 - this.state.original_co2) >=0 ?  styles.universal.smallFont_negative : styles.universal.smallFont_positive}> 
-         New Co2 Contributions: {(this.state.total_co2 - this.state.original_co2).toFixed(2)} </p>
+         New Co2 Contributions: {(this.state.total_co2 - this.state.original_co2).toFixed(2)} Tons</p>
 
         <div style={this.state.shouldHide ? {display: 'none'} : styles.universal.grey_box }> 
           <p style={styles.universal.largeFont_reg}> {this.state.current_source["Name"]} </p>
