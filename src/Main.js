@@ -8,7 +8,6 @@ import HorizontalLine from './Components/HorizontalLine';
 import Color from './Themes/Color';
 import Metric from './Themes/Metric';
 import Image from './Themes/Image';
-import {Doughnut, defaults} from 'react-chartjs-2';
 import nl2br from 'react-newline-to-break';
 
 
