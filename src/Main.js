@@ -1443,7 +1443,7 @@ class Main extends Component {
             updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265
             
 
-            updated_co2 +=this.state.co[j]*energySourceDataCopy.datasets[0]["data"][j]*265
+            updated_co2 +=this.state.co[j]*energySourceDataCopy.datasets[0]["data"][j]*265 Tons
 
 
           }
