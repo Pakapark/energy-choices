@@ -441,6 +441,15 @@ class Main extends Component {
     }
   }
 
+  totalChoicesChecked() {
+    var sum = 0
+    let checkboxes = [this.state.energySavingTipsCheckbox, this.state.publicTransitCheckbox, this.state.upgradeApplianceCheckbox, this.state.solarPanelCheckbox];
+    for (var i = checkboxes.length - 1; i >= 0; i--) {
+      if(checkboxes[i]) sum++;
+    }
+    return sum;
+  }
+
   // Assume 200,000 cites with same budget
 
   renderLightbulb() {
@@ -1584,67 +1593,79 @@ class Main extends Component {
           Click on each option to learn more.
         </div>
 
-        <div style={styles.section3Choices.checkboxContainer}>
-          <img
-            style={styles.section3Choices.checkbox}
-            alt=""
-            src={this.state.solarPanelCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
-            onClick={() => {this.setState({solarPanelCheckbox: !this.state.solarPanelCheckbox});}}
-          />
-          <a
-            style={styles.section3Choices.checkboxText}
-            href="https://news.energysage.com/compare-solar-panel-prices-california/"
-            target="_blank"
-          >
-            Install solar panels
-          </a>
-        </div>
+        <div className="row" style={styles.universal.mediumFont}>
+         <span className="col-sm-6" style={styles.section3Comparison.listText}>
+            <div style={styles.section3Choices.checkboxContainer}>
+              <img
+                style={styles.section3Choices.checkbox}
+                alt=""
+                src={this.state.solarPanelCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
+                onClick={() => {this.setState({solarPanelCheckbox: !this.state.solarPanelCheckbox});}}
+              />
+              <a
+                style={styles.section3Choices.checkboxText}
+                href="https://news.energysage.com/compare-solar-panel-prices-california/"
+                target="_blank"
+              >
+                Install solar panels
+              </a>
+            </div>
 
-        <div style={styles.section3Choices.checkboxContainer}>
-          <img
-            style={styles.section3Choices.checkbox}
-            alt=""
-            src={this.state.upgradeApplianceCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
-            onClick={() => {this.setState({upgradeApplianceCheckbox: !this.state.upgradeApplianceCheckbox});}}
-          />
-          <a
-            style={styles.section3Choices.checkboxText}
-            href="https://www.energyupgradeca.org/home-energy-efficiency/appliances/"
-            target="_blank"
-          >
-            Upgrade my appliances
-          </a>
-        </div>
-          <div style={styles.section3Choices.checkboxContainer}>
-          <img
-            style={styles.section3Choices.checkbox}
-            alt=""
-            src={this.state.energySavingTipsCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
-            onClick={() => {this.setState({energySavingTipsCheckbox: !this.state.energySavingTipsCheckbox});}}
-          />
-          <a
-            style={styles.section3Choices.checkboxText}
-            href="https://www.energyupgradeca.org/home-energy-efficiency/upgrading-your-home/"
-            target="_blank"
-          >
-            Follow energy saving tips
-          </a>
-          </div>
-          <div style={styles.section3Choices.checkboxContainer}>
-          <img
-            style={styles.section3Choices.checkbox}
-            alt=""
-            src={this.state.publicTransitCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
-            onClick={() => {this.setState({publicTransitCheckbox: !this.state.publicTransitCheckbox});}}
-          />
-          <a
-            style={styles.section3Choices.checkboxText}
-            href="http://www.iliveinthebayarea.com/knowledge-center/transit/"
-            target="_blank"
-          >
-            Take more public transit
-          </a>
-          </div>
+            <div style={styles.section3Choices.checkboxContainer}>
+              <img
+                style={styles.section3Choices.checkbox}
+                alt=""
+                src={this.state.upgradeApplianceCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
+                onClick={() => {this.setState({upgradeApplianceCheckbox: !this.state.upgradeApplianceCheckbox});}}
+              />
+              <a
+                style={styles.section3Choices.checkboxText}
+                href="https://www.energyupgradeca.org/home-energy-efficiency/appliances/"
+                target="_blank"
+              >
+                Upgrade my appliances
+              </a>
+            </div>
+              <div style={styles.section3Choices.checkboxContainer}>
+              <img
+                style={styles.section3Choices.checkbox}
+                alt=""
+                src={this.state.energySavingTipsCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
+                onClick={() => {this.setState({energySavingTipsCheckbox: !this.state.energySavingTipsCheckbox});}}
+              />
+              <a
+                style={styles.section3Choices.checkboxText}
+                href="https://www.energyupgradeca.org/home-energy-efficiency/upgrading-your-home/"
+                target="_blank"
+              >
+                Follow energy saving tips
+              </a>
+              </div>
+              <div style={styles.section3Choices.checkboxContainer}>
+              <img
+                style={styles.section3Choices.checkbox}
+                alt=""
+                src={this.state.publicTransitCheckbox ? Image.checkbox.checked : Image.checkbox.unchecked}
+                onClick={() => {this.setState({publicTransitCheckbox: !this.state.publicTransitCheckbox});}}
+              />
+              <a
+                style={styles.section3Choices.checkboxText}
+                href="http://www.iliveinthebayarea.com/knowledge-center/transit/"
+                target="_blank"
+              >
+                Take more public transit
+              </a>
+              </div>
+
+            </span>
+            <span className="col-sm-6">
+              Savings:
+              <img alt=""src={Image.lightbulb.medium} width={50 * this.totalChoicesChecked()} height={50 * this.totalChoicesChecked()} />
+            </span>
+
+          </div>  
+
+
         <ContinueButton href="#lastPage" />
       </ProgressBarContainer>
     );
