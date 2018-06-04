@@ -23,7 +23,7 @@ const CAR_COST = 23;
 const HEATER_CONSTANT = 250;
 const AC_CONSTANT = 50;
 const GLOBAL_ELECTRICITY_USAGE = 152.25; // In trillion bulbs per month
-const GLOBAL_CITIES_CONVERSION = 200; // Converts to trillions of dollars
+const GLOBAL_CITIES_CONVERSION = 200; // Converts from millions to billions of dollars
 
 const NEIGHBOUR = {
   LIGHTBULB: 3000,
@@ -425,7 +425,19 @@ class Main extends Component {
     if(this.state.city_energy_cost < this.state.city_energy_budget) {
       return " electricty costs saved ";
     } else {
-      return " extra electricty costs paid ";
+      return " extra electricty costs ";
+    }
+  }
+
+  calculateCO2GlobalImpact() { // Returns in millions of tons of Co2
+    return (this.state.total_co2 * (GLOBAL_CITIES_CONVERSION / 1000.0) * Math.abs(1 - (this.state.total_co2 / this.state.original_co2))).toFixed(1)
+  }
+
+  citySavedCO2Text() {
+    if(this.state.total_co2 < this.state.original_co2) {
+      return "Decrease";
+    } else {
+      return "Increase";
     }
   }
 
@@ -1215,39 +1227,38 @@ class Main extends Component {
 
 
         </div>
-<img alt="" src={Image.city.city_full} />
-                 <div style={styles.universal.mediumFont}>
-                How much energy do you think your city (with 280,000 housholds) uses per month?
+        <img alt="" src={Image.city.city_full} />
+                         <div style={styles.universal.mediumFont}>
+                        How much energy do you think your city (with 280,000 housholds) uses per month?
 
 
 
+                </div>
+
+                  <div style={styles.universal.smallFont}>Hint: Your housold total was {this.state.totalHouseEnergy} <img alt=""src={Image.lightbulb.small} /></div>
+
+                <div className="row h-40">
+
+
+                <span className="col-sm-4">
+
+
+
+          <QuizButton href="#section2Quiz" text="Less than 1 Billion "/>
+          </span>
+          <span className="col-sm-4">
+
+
+          <QuizButton href="#section2Quiz" text="Between 1 and 5 Billion"/>
+          </span> 
+
+          <span className="col-sm-4">
+            <QuizButton href="#section2Quiz" text="More than 5 Billion"/>
+          </span>
         </div>
-
-          <div style={styles.universal.smallFont}>Hint: Your housold total was {this.state.totalHouseEnergy} <img alt=""src={Image.lightbulb.small} /></div>
-
-        <div className="row h-40">
-
-
-        <span className="col-sm-4">
-
-
-
-  <QuizButton href="#section2Quiz" text="Less than 1 Billion "/>
-  </span>
-  <span className="col-sm-4">
-
-
-  <QuizButton href="#section2Quiz" text="Between 1 and 5 Billion"/>
-  </span> 
-
-  <span className="col-sm-4">
-    <QuizButton href="#section2Quiz" text="More than 5 Billion"/>
-  </span >
-</div>
       </ProgressBarContainer>
     );
   }
-
 
 
 
@@ -1548,6 +1559,7 @@ class Main extends Component {
           </div>
           <ul>
             <li>${this.calculateCityGlobalImpact()} billion in {this.citySavedText()} monthly</li>
+            <li>{this.citySavedCO2Text()} monthly Co2 emissions by {this.calculateCO2GlobalImpact()} million tons</li>
             <li>Prevent 1° C of temperature increase by 2050</li>
           </ul>
          </span>
@@ -1566,6 +1578,10 @@ class Main extends Component {
         <HorizontalLine section />
         <div style={styles.universal.largeFont}>
           What will you do to save?
+        </div>
+
+        <div style={styles.universal.smallFont}>
+          Click on each option to learn more.
         </div>
 
         <div style={styles.section3Choices.checkboxContainer}>
