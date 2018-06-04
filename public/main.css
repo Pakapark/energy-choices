@@ -28,3 +28,11 @@ input[type=number]:focus {
   border-bottom: "1px solid black";
   outline: none;
 }
+
+input[type=checkbox] {
+  border: 1px solid #E85349;
+}
+
+b {
+  font-weight: 700;
+}

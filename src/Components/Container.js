@@ -39,7 +39,6 @@ class Container extends Component {
           fontFamily: Metric.font.family.normal,
           color: Color.normalText,
           fontSize: Metric.font.size.normalText,
-          fontFamily: Metric.font.family.normalText,
           fontWeight: Metric.font.weight.regular,
           textAlign: "center"
         }}
