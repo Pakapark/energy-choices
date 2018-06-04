@@ -9,17 +9,81 @@ import Color from './Themes/Color';
 import Metric from './Themes/Metric';
 import Image from './Themes/Image';
 import {Doughnut, defaults} from 'react-chartjs-2';
+import nl2br from 'react-newline-to-break';
 
 
 class Main extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      shouldHide: true,
+      current_source: {},
       zipcode: "",
       city_energy_budget: 26.25,
       city_energy_cost: 26.25,
       
       cost_per_kwh: [.11, .12, .08, .09, .14, .08],
+      energy_data_details: [
+      {
+        Name: "Nuclear",
+        Advantages: " - Domestic source of energy \n - Affordability \n - Cleaner than fossil fuels",
+        Disadvantages: " - Risk of nuclear accidents \n - Nuclear waste \n - Radioactive explosion ",
+        cost_per_kwh: "0.11",
+        c_cost: "0.08",
+        o_cost: "0.03"
+      },
+
+      {
+        Name: "Coal",
+        Advantages: " - Reliability \n - Affordability \n - Abundance",
+        Disadvantages: "- Greenhouse gas emissions \n - Generation of millions of tons of waste \n - Emission of mercury, sulfur dioxide, carbon monoxide, mercury, selenium, and arsenic",
+        cost_per_kwh: "0.12",
+        c_cost: "0.08",
+        o_cost: "0.04"
+      },
+
+      {
+        Name: "Natural Gas",
+        Advantages: " - Reliability \n - Affordability \n - Abundance",
+        Disadvantages: "- Greenhouse gas emissions \n - Susceptible to dangerous explosions \n - Emission of carbon monoxide",
+        cost_per_kwh: "0.08",
+        c_cost: "0.02",
+        o_cost: "0.06"
+      },
+
+
+      {
+        Name: "Hydropower, Biomass, Geothermal",
+        Advantages: " - Domestic source of energy \n - Affordability \n - Cleaner than fossil fuels",
+        Disadvantages: "",
+        cost_per_kwh: "0.11",
+        c_cost: "0.08",
+        o_cost: "0.03"
+      },
+
+      {
+        Name: "Solar" ,
+        Advantages: " - Renewable  \n - Clean \n- Abundance \n - Excess power can be sold back to the power company \n - Safer for energy workers \n - Domestic source of energy",
+        Disadvantages: " - Risk of nuclear accidents \n - Nuclear waste \n - Radioactive explosion ",
+        cost_per_kwh: "0.14",
+        c_cost: "0.13",
+        o_cost: "0.01",
+      },
+
+
+      {
+        Name: "Wind",
+        Advantages: "- Affordable \n - Renewable \n - Clean \n - Domestic source of energy \n - Excess power can be sold back to the power company \n - Safer for energy workers",
+        Disadvantages: " - Turbines might cause noise and aesthetic pollution \n - Weather Dependent \n - Uses a Lot of Space",
+        cost_per_kwh: "0.08",
+        c_cost: "0.07",
+        o_cost: "0.01"
+      },
+
+
+
+      ],
+
       energy_source_data: {
         labels: [
           
@@ -38,7 +102,7 @@ class Main extends Component {
             '#E85349',
             '#ED6472',
             '#E58E97',
-            '#C9DAE1',
+            '#a8ccdb',
             '#29ABC9',
             '#218DA7',
           ],
@@ -62,6 +126,8 @@ class Main extends Component {
 
 
     this.zipcodeOnChange = this.zipcodeOnChange.bind(this);
+
+
     
   }
 
@@ -86,7 +152,8 @@ increment() {
     this.setState({
         data: Object.assign({}, this.state.energy_source_data, {
             datasets: datasetsCopy
-        })
+        }),
+        
     });
 }
 
@@ -316,24 +383,23 @@ increment() {
 
 
 
-
+    
     
     return (
       <ProgressBarContainer section="section1Summary" progress="home">
         <div style={styles.universal.sectionHeadline}>
-          Energy Sources 
+          My City's Energy Sources: Financial Breakdown 
         </div>
         <HorizontalLine section />
-        <div className="row">
-          <span className="col-sm-6">
-
-            <Doughnut data={this.state.energy_source_data}
-            width="80%"
-            height="80%"
+        <div className="row ">
+          <span className="col-sm-4">
+          <div className="row">
+            <Doughnut data={this.state.energy_source_data} width="80%" height="80%"
               onElementsClick={(elem) => 
                 { if (elem.length > 0) {
+                  var s = false
                     var updated_cost = 0
-                    console.log(elem[0]["_index"])
+                    console.log()
                     var energySourceDataCopy = this.state.energy_source_data;
                     energySourceDataCopy.datasets[0]["data"][elem[0]["_index"]] *= 1.1;
                     var total = 0
@@ -343,16 +409,22 @@ increment() {
                     for (var j = 0; j < energySourceDataCopy.datasets[0]["data"].length; j++) {
                       energySourceDataCopy.datasets[0]["data"][j]/= total;
                       updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265
-                      console.log(this.state.cost_per_kwh[j])
-                      console.log(energySourceDataCopy.datasets[0]["data"][j])
-
+                     
                     }
                     this.setState({city_energy_cost: updated_cost.toFixed(2)})
-
-                    console.log(energySourceDataCopy.datasets[0]["data"][elem[0]["_index"]])
+                    this.setState({current_source: Object.assign({}, this.state.energy_data_details[elem[0]["_index"]])});
+                    this.state.shouldHide = false
                     this.setState({energy_source_data: Object.assign({}, energySourceDataCopy)});
+                    this.setState({shouldHide: s});
                   }
               }} />
+              </div>
+              <div className="row">
+                      <div style={styles.universal.grey_box}> 
+          Click on the the energy sources in this graph to learn the facts about each source 
+        </div>
+              </div>
+
             </span>
             <span className="col-sm-6">
             <div style={styles.universal.mediumFont}>Monthy Energy Consuption:</div>
@@ -361,7 +433,42 @@ increment() {
 
        | Total Cost: ${ this.state.city_energy_cost }M
 
-        <div style={styles.universal.smallFont}> Total Savings: <p style={this.state.city_energy_budget - this.state.city_energy_cost >=0 ? styles.universal.smallFont_positive : styles.universal.smallFont_negative}> ${ (this.state.city_energy_budget - this.state.city_energy_cost).toFixed(2) }M </p></div> 
+        <div style={styles.universal.smallFont}> Total Savings: 
+        <p style={this.state.city_energy_budget - this.state.city_energy_cost >=0 ? styles.universal.smallFont_positive : styles.universal.smallFont_negative}> ${ (this.state.city_energy_budget - this.state.city_energy_cost).toFixed(2) }M 
+        </p></div> 
+        
+
+
+
+        <div style={this.state.shouldHide ? {display: 'none'} : styles.universal.grey_box }> 
+        <p style={styles.universal.largeFont_reg}> {this.state.current_source["Name"]} </p>
+        <div className="row ">
+        <span className="col-sm-4">
+<p style={styles.universal.smallFont_left}>         <p style={styles.universal.smallFont_positive}> 
+        
+        Advantages:  </p>{nl2br(this.state.current_source["Advantages"])}
+        </p></span>
+        <span className="col-sm-4">
+ <p style={styles.universal.smallFont_left}>        
+ <p style={styles.universal.smallFont_negative}> 
+
+
+        Disadvantages: </p>{nl2br(this.state.current_source["Disadvantages"])}
+        </p>
+        </span>
+<span className="col-sm-4">
+ <p style={styles.universal.smallFont_left}>     
+        <p style={styles.universal.smallFont_bold}> 
+        Total Cost: ${this.state.current_source["cost_per_kwh"]}/KWH</p> 
+        Infrastructure Cost: ${this.state.current_source["c_cost"]}/KWH
+        <br/>
+        Fuel Generation Cost: ${this.state.current_source["o_cost"]} /KWH
+        </p>
+</span>
+
+        </div>
+        
+        </div> 
 
 
         </div>
@@ -496,15 +603,28 @@ const styles = {
       fontSize: Metric.font.size.headline,
       color: Color.headline,
       textAlign: "center"
-    },
+    }, 
     smallFont: {
       fontSize: Metric.font.size.medium,
       fontWeight: Metric.font.weight.regular,
       margin: "30px 0"
     },
+
+    smallFont_left: {
+      fontSize: Metric.font.size.medium,
+      fontWeight: Metric.font.weight.regular,
+      margin: "30px 0",
+      textAlign: "left",
+    },
     mediumFont: {
       fontSize: Metric.font.size.large,
       fontWeight: Metric.font.weight.medium,
+      margin: "30px 0"
+    },
+
+    mediumFont_bold: {
+      fontSize: Metric.font.size.large,
+      fontWeight: Metric.font.weight.bold,
       margin: "30px 0"
     },
     largeFont: {
@@ -512,20 +632,40 @@ const styles = {
       fontWeight: Metric.font.weight.bold,
       margin: "30px 0"
     },
+    largeFont_reg: {
+      fontSize: Metric.font.size.extraLarge,
+      fontWeight: Metric.font.weight.regular,
+      margin: "30px 0"
+    },
 
     smallFont_negative: {
       fontSize: Metric.font.size.medium,
-      fontWeight: Metric.font.weight.regular,
+      fontWeight: Metric.font.weight.bold,
       color: "#E85349"
 
     },
 
     smallFont_positive: {
       fontSize: Metric.font.size.medium,
-      fontWeight: Metric.font.weight.regular,
+      fontWeight: Metric.font.weight.bold,
       color: "#3CB371"
 
-    }
+    },
+
+    smallFont_bold: {
+      fontSize: Metric.font.size.medium,
+      fontWeight: Metric.font.weight.bold,
+
+    },
+    grey_box: {
+      fontSize: Metric.font.size.medium,
+      fontWeight: Metric.font.weight.regular,
+      margin: "20px 0",
+      backgroundColor: "#C9DAE1",
+      padding: "30px",
+      borderRadius: "25px"
+
+    },
   },
 
   // Home Page
