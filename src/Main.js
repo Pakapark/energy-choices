@@ -21,8 +21,15 @@ const CAR_COST = 23;
 const HEATER_CONSTANT = 250;
 const AC_CONSTANT = 50;
 
+// const ELECTRICITY_COST_PER_BULB = 0.0084 // In dollars per bulb, assuming $0.14 per KWH
+// 60 WH / bulb * 0.001 KWH / WH * 0.14 $ / KWH = 0.0084 $/bulb
+
+const GLOBAL_ELECTRICITY_COST = 1270 // Billion $ / month
 const GLOBAL_ELECTRICITY_USAGE = 152.25; // In trillion bulbs per month
-const GLOBAL_CITIES_CONVERSION = 200; // Converts to trillions of dollars
+const GLOBAL_CITIES_CONVERSION = 200; // Converts to billions of dollars
+
+//Total estimated global monthly energy cost = $1.27 trillion
+
 
 const NEIGHBOUR = {
   LIGHTBULB: 3000,
@@ -411,6 +418,14 @@ class Main extends Component {
     }
   }
 
+  householdPercentDifferenceText() {
+    if(this.state.totalHouseEnergy < NEIGHBOUR.TOTAL) {
+      return "reduced";
+    } else {
+      return "increased";
+    }
+  }
+
   calculateCityGlobalImpact() {
     return (this.state.city_energy_cost * GLOBAL_CITIES_CONVERSION * Math.abs(1 - (this.state.city_energy_cost / this.state.city_energy_budget))).toFixed(1); // in billions
   }
@@ -421,6 +436,22 @@ class Main extends Component {
     } else {
       return " extra electricty costs paid ";
     }
+  }
+
+  householdSavedMoneyText() {
+    if(this.state.totalHouseEnergy < NEIGHBOUR.TOTAL) {
+      return "saved";
+    } else {
+      return "more spent";
+    }
+  }
+
+  calculateNeighborDifference() {
+    return(Math.abs(1 - parseFloat(this.state.totalHouseEnergy) / NEIGHBOUR.TOTAL));
+  }
+
+  calculateHouseholdGlobalElectricityCost() {
+    return((this.calculateNeighborDifference() * GLOBAL_ELECTRICITY_COST).toFixed(1)); // In trillions of dollars per month
   }
 
   mouseoverWrapper(chartInstance) {
@@ -490,7 +521,7 @@ class Main extends Component {
     return (
       <div style={styles.section1Utility.utilityContainer} className="row">
         <span className="col-sm-9" style={{padding: "5px 10px"}}>
-          <div style={styles.section1Utility.utilityHeader}>Drying Machine</div>
+          <div style={styles.section1Utility.utilityHeader}>Dryer</div>
           <div style={styles.section1Utility.utilitySliderContainer}>
             <div style={styles.section1Utility.utilityFactor}>Quantity</div>
             <div>
@@ -994,7 +1025,7 @@ class Main extends Component {
               </td>
             </tr>
             <tr style={styles.universal.smallFont}>
-              <td style={{paddingBottom: "10px", textAlign: "left", paddingLeft: "50px"}}>Drying Machine</td>
+              <td style={{paddingBottom: "10px", textAlign: "left", paddingLeft: "50px"}}>Dryer</td>
               <td style={{paddingBottom: "10px"}}>{this.state.dryingMachineEnergy} <img alt=""src={Image.lightbulb.small} /></td>
               <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.DRYING_MACHINE}&nbsp;<img alt=""src={Image.lightbulb.small} /></td>
               <td
@@ -1067,6 +1098,9 @@ class Main extends Component {
           Energy Saving Tips
         </div>
         <HorizontalLine section />
+        <div style={styles.universal.mediumFont}>
+          Would you like to save by reducing your energy consumption? Here are some tips to get started.
+        </div>     
         <div style={{fontSize: Metric.font.size.small, fontWeight: Metric.font.weight.medium, color: Color.red, padding: "5px 0"}}>
           Focus your improvements on the red areas.
         </div>
@@ -1084,7 +1118,7 @@ class Main extends Component {
             <div style={styles.section1Suggestion.utilitySliderContainer}>
               <ol>
                 <li>Use sunlight during the daytime</li>
-                <li>Choose <b>Compact Fluorescent Lights (CFL) Lighbulb over Incandescent Lightbulb</b>. CFL is about a dollar more per bulb but it uses 70% less and last years longer than traditional lightbulbs.</li>
+                <li>Choose <b>Compact Fluorescent Lights (CFL) Lighbulbs over Incandescent Lightbulbs</b>. CFL is about a dollar more per bulb but it uses 70% less electricity and last much longer than traditional lightbulbs.</li>
               </ol>
             </div>
           </div>
@@ -1097,11 +1131,11 @@ class Main extends Component {
             borderShadow: "2px",
             padding: "5px 10px"
           }}>
-            <div style={styles.section1Suggestion.utilityHeader}>Drying Machine</div>
+            <div style={styles.section1Suggestion.utilityHeader}>Dryer</div>
             <div style={styles.section1Suggestion.utilitySliderContainer}>
               <ol>
-                <li>The best way to save energy from drying machine is <b>not to use it</b>. If the weather outside is <b>dry, sunny abd windy</b>, You should <b>hang out your clothes outside instead of using drying machine</b>.</li>
-                <li>Use drying machine with a full load of laundry</li>
+                <li>The best way to save energy with your dryer is <b>not to use it</b>. If the weather outside is <b>dry, sunny and windy</b>, You should <b>hang out your clothes outside instead of using a dryer</b>.</li>
+                <li>Use your dryer with a full load of laundry</li>
               </ol>
             </div>
           </div>
@@ -1119,8 +1153,8 @@ class Main extends Component {
             <div style={styles.section1Suggestion.utilityHeader}>Laptop</div>
             <div style={styles.section1Suggestion.utilitySliderContainer}>
               <ol>
-                <li>Activate <b>Your Laptop's Battery Saver or Eco Mode</b></li>
-                <li>Disable <b>All Unused Devices and Ports</b> Such As Keyboard, Mouse, and Speaker</li>
+                <li>Activate <b>your laptop's Battery Saver or Eco mode</b></li>
+                <li>Disable <b>all unused devices and ports</b> such as your keyboard, mouse, and speaker</li>
                 <li>Turn Off Apps and Processes that you don't use</li>
               </ol>
             </div>
@@ -1137,8 +1171,8 @@ class Main extends Component {
             <div style={styles.section1Suggestion.utilityHeader}>Air Conditioner</div>
             <div style={styles.section1Suggestion.utilitySliderContainer}>
               <ol>
-                <li><b>Use A/C Programmable Thermostat</b> to increase the temperature when you leave or asleep</li>
-                <li><b>Use Electric Fan</b> if necessary. The cost and energy consumed by the air conditioner is <b>36 times more than ceiling electric fan</b>.</li>
+                <li><b>Use an A/C Programmable Thermostat</b> to increase the temperature when you leave or asleep</li>
+                <li><b>Use an Electric Fan</b> if necessary. The cost and energy consumed by an air conditioner is <b>36 times more than an electric ceiling fan</b>.</li>
               </ol>
             </div>
           </div>
@@ -1156,7 +1190,7 @@ class Main extends Component {
             <div style={styles.section1Suggestion.utilityHeader}>Television</div>
             <div style={styles.section1Suggestion.utilitySliderContainer}>
               <ol>
-                <li><b>Watching TV program on laptop is 3 times cheaper than watching on TV itself.</b></li>
+                <li><b>Watching TV on your laptop is 3 times cheaper than watching on a TV itself.</b></li>
                 <li>Get the family to watch TV together.</li>
                 <li>Lower the contrast and brightness on your set and watch TV in low light.</li>
               </ol>
@@ -1174,8 +1208,8 @@ class Main extends Component {
             <div style={styles.section1Suggestion.utilityHeader}>Heater</div>
             <div style={styles.section1Suggestion.utilitySliderContainer}>
               <ol>
-                <li><b>Use Programmable Thermostat</b> to optimize the energy usage. This can save up 15% of your normal energy usage.</li>
-                <li>Use heater for a small compartment of your house instead of heating up the entire house.</li>
+                <li><b>Use a Programmable Thermostat</b> to optimize the energy usage. This can save up 15% of your normal energy.</li>
+                <li>Use a heater for a small part of your house instead of heating up the entire house.</li>
               </ol>
             </div>
           </div>
@@ -1194,7 +1228,7 @@ class Main extends Component {
             <div style={styles.section1Suggestion.utilitySliderContainer}>
               <ol>
                 <li>You can save a lot of energy by <b>simply washing your clothes in cold water</b>, which is a perfectly efficient way to clean most clothes. </li>
-                <li>Use washing machine with a full load of laundry</li>
+                <li>Use your washing machine with a full load of laundry</li>
               </ol>
             </div>
           </div>
@@ -1210,9 +1244,9 @@ class Main extends Component {
             <div style={styles.section1Suggestion.utilityHeader}>Car</div>
             <div style={styles.section1Suggestion.utilitySliderContainer}>
               <ol>
-                <li><b>Use public transportation</b> such as bus and train</li>
+                <li><b>Use public transportation</b> such as buses and trains</li>
                 <li>Drive sensibly. According to US Department of Energy, <b>rapid acceleration and hard braking are the quickest way to waste gas</b>.</li>
-                <li><b>No Idling</b> because it can consume up to half a gallon of fuel per hour. </li>
+                <li><b>Avoid idling.</b> It can consume up to half a gallon of fuel per hour. </li>
               </ol>
             </div>
           </div>
@@ -1333,6 +1367,10 @@ class Main extends Component {
     </div>
   </span>
   <span className="col-sm-8 ">
+
+    <div style={styles.universal.mediumFont}>
+      Find a way to save money! Click on a section of the graph to use more of that energy source and see how it affects your Total Savings. 
+    </div>         
     <div style={{fontSize: Metric.font.size.large, fontWeight: Metric.font.weight.bold}}>Monthly Energy Consumption:</div>
     <div style={{fontSize: Metric.font.size.medium, fontWeight: Metric.font.weight.regular}}>
       City Budget: ${ this.state.city_energy_budget }M
@@ -1525,9 +1563,10 @@ class Main extends Component {
          <span className="col-sm-6" style={styles.section3Comparison.listText}>
           If every house were like my house...
           <ul style={{fontWeight: Metric.font.weight.regular, fontSize: Metric.font.size.medium}}>
-            <li style={{marginTop: "20px"}}><b style={{fontSize: Metric.font.size.large}}>{(100 * (parseFloat(this.state.totalHouseEnergy) / NEIGHBOUR.TOTAL)).toFixed(1)}%</b> of current average <img alt=""src={Image.lightbulb.small} /> used per month</li>
+            <li style={{marginTop: "20px"}}><b style={{fontSize: Metric.font.size.large}}>0.5° C</b> of temperature increase prevented by 2050</li>
+            <li style={{marginTop: "20px"}}><b style={{fontSize: Metric.font.size.large}}>{(100 * this.calculateNeighborDifference()).toFixed(1)}%</b> <img alt=""src={Image.lightbulb.small} /> {this.householdPercentDifferenceText()} energy consumption per month</li>
             <li style={{marginTop: "20px"}}><b style={{fontSize: Metric.font.size.large}}>{this.calculateHouseholdGlobalImpact()} trillion</b> <img alt=""src={Image.lightbulb.medium} /> {this.householdSavedText()} per month</li>
-            <li style={{marginTop: "20px"}}>Prevent <b style={{fontSize: Metric.font.size.large}}>0.5° C</b> of temperature increase by 2050</li>
+            <li style={{marginTop: "20px"}}><b style={{fontSize: Metric.font.size.large}}>${this.calculateHouseholdGlobalElectricityCost()} billion</b> {this.householdSavedMoneyText()} per month</li>
           </ul>
          </span>
          <span className="col-sm-6" style={styles.section3Comparison.listText}>
@@ -1536,8 +1575,8 @@ class Main extends Component {
             <Doughnut data={this.state.energy_source_data}/>
           </div>
           <ul style={{fontWeight: Metric.font.weight.regular, fontSize: Metric.font.size.medium}}>
+            <li style={{marginTop: "20px"}}><b style={{fontSize: Metric.font.size.large}}>1° C</b> of temperature increase prevented by 2050</li>
             <li style={{marginTop: "20px"}}><b style={{fontSize: Metric.font.size.large}}>${this.calculateCityGlobalImpact()} billion</b> in {this.citySavedText()} monthly</li>
-            <li style={{marginTop: "20px"}}>Prevent <b style={{fontSize: Metric.font.size.large}}>1° C</b> of temperature increase by 2050</li>
           </ul>
          </span>
         </div>
