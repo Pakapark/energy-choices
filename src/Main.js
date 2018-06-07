@@ -233,6 +233,9 @@ class Main extends Component {
       () => this.increment(),
       500
     )
+
+    this.addDoughnutHover("section2Doughnut");
+    this.addDoughnutHover("section2DoughnutEco");
   }
 
   componentWillUnmount() {
@@ -249,6 +252,12 @@ class Main extends Component {
             datasets: datasetsCopy
         })
     });
+  }
+
+  addDoughnutHover(donutRef) {
+    var doughnut = this.refs[donutRef].chartInstance;
+    doughnut.options.hover.onHover = this.mouseoverWrapper(doughnut);
+    doughnut.options.events = ["touchstart", "click"]  
   }
 
   zipcodeOnChange(event) {
@@ -413,6 +422,20 @@ class Main extends Component {
       return " extra electricty costs paid ";
     }
   }
+
+  mouseoverWrapper(chartInstance) {
+    let context = this;
+    return((event) => {
+    console.log('onHover Called', event);
+    let elem = chartInstance.getElementAtEvent(event);
+    if(elem.length > 0) {
+      context.setState({current_source: Object.assign({}, context.state.energy_data_details[elem[0]["_index"]])});
+      context.state.shouldHide = false;
+    }
+    });
+  }
+
+
 
   // Assume 200,000 cites with same budget
 
@@ -824,7 +847,7 @@ class Main extends Component {
         </div>
         <HorizontalLine />
         <div style={styles.unitIntroduction.descriptionContainer}>
-          <div style={styles.unitIntroduction.normalTextContainer}>We define a super cool new unit of energy called Lightbulb (<img alt=""src={Image.lightbulb.small} />) </div>
+          <div style={styles.unitIntroduction.normalTextContainer}>So we're all on the same page, we define a new unit of energy called a Lightbulb (<img alt=""src={Image.lightbulb.small} />) </div>
           <div style={styles.unitIntroduction.emphasizedText}>1 <img alt=""src={Image.lightbulb.medium} /></div>
           <div style={styles.unitIntroduction.normalTextContainer}>is equivalent to</div>
           <div style={styles.unitIntroduction.emphasizedText}>The amount of energy consumed by<br /> a lightbulb for an hour</div>
@@ -842,7 +865,11 @@ class Main extends Component {
         </div>
         <HorizontalLine section />
         <div style={styles.universal.mediumFont}>
-          Please Fill in Your Zip Code For a Personalized Experience
+          We'll start by exploring the energy choices you make in your own home.
+        </div>        
+
+        <div style={styles.universal.mediumFont}>
+          Please fill in your zip code for a personalized experience
         </div>
         <div style={styles.section1Introduction.zipCodeInputContainer}>
           <input
@@ -854,6 +881,10 @@ class Main extends Component {
             placeholder="e.g. 94305"
           />
         </div>
+
+        <div style={styles.universal.smallFont}>
+          Your house will start with the average energy use for your area. You can then change the sliders to reflect your own habits. 
+        </div>        
         <div style={{visibility: this.state.zipcode.length > 4 ? "visible": "hidden"}}>
           <div style={styles.universal.mediumFont}>Did You Know That</div>
           <div style={styles.universal.smallFont}>On average, a single family house in your area uses energy</div>
@@ -871,7 +902,7 @@ class Main extends Component {
           Calculate Your Monthly Energy Usage
         </div>
         <HorizontalLine section />
-        <div style={styles.universal.smallFont}>Please Tuning Your Daily Routine to Calculate <b>Your Monthly Energy Usage</b></div>
+        <div style={styles.universal.smallFont}>Please Tune Your Daily Routine to Calculate <b>Your Monthly Energy Usage</b></div>
         <div style={styles.section1Utility.utilityRow}>
           {this.renderLightbulb()}
           {this.renderDryingMachine()}
@@ -1036,8 +1067,8 @@ class Main extends Component {
           Energy Saving Tips
         </div>
         <HorizontalLine section />
-        <div style={{fontSize: Metric.font.size.small, fontWeight: Metric.font.weight.light, color: Color.red, padding: "5px 0"}}>
-          Red color indicates the area you can do better
+        <div style={{fontSize: Metric.font.size.small, fontWeight: Metric.font.weight.medium, color: Color.red, padding: "5px 0"}}>
+          Focus your improvements on the red areas.
         </div>
         <div style={styles.section1Suggestion.utilityRow}>
           <div style={{
@@ -1228,7 +1259,7 @@ class Main extends Component {
 
   renderSection2Quiz() {
     return (
-      <ProgressBarContainer section="section2Quiz" progress="home">
+      <ProgressBarContainer section="section2Quiz" progress="city">
         <div style={styles.universal.sectionHeadline}>
           Energy Intuition
         </div>
@@ -1260,8 +1291,8 @@ class Main extends Component {
 
   renderSection2Doughnut() {
 
-    return (
-    <ProgressBarContainer section="section2Doughnut" progress="home">
+    var res =
+    <ProgressBarContainer section="section2Doughnut" progress="city">
       <div style={styles.universal.sectionHeadlineSub}>
         My City's Energy Sources: Financial Breakdown
       </div>
@@ -1270,12 +1301,12 @@ class Main extends Component {
         <span className="col-sm-4">
           <div className="row">
             <Doughnut
+              ref='section2Doughnut'
               data={this.state.energy_source_data}
               width="80%"
               height="80%"
               onElementsClick={(elem) =>
               { if (elem.length > 0) {
-                var s = false
                 var updated_cost = 0
                 console.log()
                 var energySourceDataCopy = this.state.energy_source_data;
@@ -1292,13 +1323,12 @@ class Main extends Component {
                 this.setState({current_source: Object.assign({}, this.state.energy_data_details[elem[0]["_index"]])});
                 this.state.shouldHide = false
                 this.setState({energy_source_data: Object.assign({}, energySourceDataCopy)});
-                this.setState({shouldHide: s});
               }
             }} />
           </div>
     <div className="row">
       <div style={styles.universal.grey_box}>
-        Click on the  energy sources in this graph to learn the facts about each source
+        Hover over the energy sources in this graph to learn the facts about each source. Click on a source to increase it.
       </div>
     </div>
   </span>
@@ -1342,8 +1372,9 @@ class Main extends Component {
   </span>
 </div>
 <ContinueButton href="#section2Eco" />
-</ProgressBarContainer>
-    );
+</ProgressBarContainer>;
+
+    return(res);
   }
 
   renderSection2Eco() {
@@ -1368,7 +1399,7 @@ class Main extends Component {
   renderSection2DoughnutEco() {
 
     return (
-      <ProgressBarContainer section="section2DoughnutEco" progress="home">
+      <ProgressBarContainer section="section2DoughnutEco" progress="city">
         <div style={styles.universal.sectionHeadlineSub}>
           My City's Energy Sources: Financial Breakdown
         </div>
@@ -1377,6 +1408,7 @@ class Main extends Component {
           <span className="col-sm-4">
             <div className="row">
               <Doughnut
+                ref="section2DoughnutEco"
                 data={this.state.energy_source_data}
                 width="80%"
                 height="80%"
@@ -1410,7 +1442,7 @@ class Main extends Component {
             </div>
             <div className="row">
               <div style={styles.universal.grey_box}>
-                Click on the energy sources in this graph to learn the facts about each source
+                Hover over the energy sources in this graph to learn the facts about each source. Click on a source to increase it.
               </div>
             </div>
           </span>
@@ -1509,12 +1541,14 @@ class Main extends Component {
           </ul>
          </span>
         </div>
-        <ContinueButton href="#section3Choices" />
+        <ContinueButton href="#lastPage" />
       </ProgressBarContainer>
     );
   }
 
-  renderSection3Choies() {
+
+  renderSection3Choices() { 
+    // Note: unused
       return (
       <ProgressBarContainer section="section3Choices" progress="world">
         <div style={styles.universal.sectionHeadline}>
@@ -1634,7 +1668,6 @@ class Main extends Component {
       {this.renderSection2Eco()}
       {this.renderSection2DoughnutEco()}
       {this.renderSection3Comparison()}
-      {this.renderSection3Choies()}
       {this.renderConclusion()}
       </div>
     );
