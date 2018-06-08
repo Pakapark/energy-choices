@@ -4,6 +4,8 @@ import ContinueButton from './Components/ContinueButton';
 import ShareButton from './Components/ShareButton';
 import Container from './Components/Container';
 import QuizButton from './Components/QuizButton';
+import Quiz2Button from './Components/Quiz2Button';
+
 import ProgressBarContainer from './Components/ProgressBarContainer';
 import HorizontalLine from './Components/HorizontalLine';
 import nl2br from 'react-newline-to-break';
@@ -11,6 +13,8 @@ import Color from './Themes/Color';
 import Metric from './Themes/Metric';
 import Image from './Themes/Image';
 import { Button, ButtonToolbar,  ButtonGroup} from 'react-bootstrap';
+import Snowf from 'react-snowf';
+
 
 const DRYING_MACHINE_COST = 56;
 const DAYS_IN_MONTH = 30;
@@ -91,7 +95,7 @@ class Main extends Component {
       city_energy_budget: 26.25,
       city_energy_cost: 26.25,
 
-      cost_per_kwh: [.11, .12, .08, .09, .14, .08],
+      cost_per_kwh: [.11, .12, .07, .09, .14, .08],
 
       co: [ 66, 1050, 443, 26, 13, 9],
       energy_data_details: [{
@@ -114,9 +118,9 @@ class Main extends Component {
           Name: "Natural Gas",
           Advantages: " - Reliability \n - Affordability \n - Abundance",
           Disadvantages: "- Greenhouse gas emissions \n - Susceptible to dangerous explosions \n - Emission of carbon monoxide",
-          cost_per_kwh: "0.08",
+          cost_per_kwh: "0.07",
           c_cost: "0.02",
-          o_cost: "0.06",
+          o_cost: "0.05",
           co: 443.
         }, {
           Name: "Hydropower, Biomass, Geothermal",
@@ -1363,18 +1367,18 @@ renderSection2EnergySources() {
         <HorizontalLine section />
 
         <div style={styles.universal.largeFont_reg}>
-          Now imagine the mayor of your city asks you to find the optimal energy source portfolio to save the city money. What would you choose?
+          Now imagine the mayor of your city asks you to find the optimal energy source portfolio to save the city the most money possible. What would you choose?
         </div>
 
         <div className="row h-40">
           <span className="col-sm-4">
-            <QuizButton href="#section2Doughnut" text="Increase wind  by 50% (reducing everything else)"/>
+            <Quiz2Button href="#section2Doughnut" text="Increase Wind  by 50% (reducing everything else equally)"/>
           </span>
           <span className="col-sm-4">
-            <QuizButton href="#section2Doughnut" text="Increase Coal by 50%, (reducing everything else) "/>
+            <Quiz2Button href="#section2Doughnut" text="Increase Coal by 50% (reducing everything else equally)"/>
           </span>
           <span className="col-sm-4">
-            <QuizButton href="#section2Doughnut" text="Increase Nuclear by 50%" />
+            <Quiz2Button href="#section2Doughnut" text="Increase Nuclear by 50% (reducing everything else equally)" />
           </span >
         </div>
 
@@ -1393,7 +1397,7 @@ renderSection2EnergySources() {
     var res =
     <ProgressBarContainer section="section2Doughnut" progress="city">
       <div style={styles.universal.sectionHeadlineSub}>
-        Energy Financial Breakdown
+        $5 Million Energy Challenge:
       </div>
       <HorizontalLine section />
       <div className="row ">
@@ -1416,8 +1420,8 @@ renderSection2EnergySources() {
                 }
                 for (var j = 0; j < energySourceDataCopy.datasets[0]["data"].length; j++) {
                   energySourceDataCopy.datasets[0]["data"][j]/= total;
-                  energySourceDataCopy.datasets[0]["data"][j] = energySourceDataCopy.datasets[0]["data"][j].toFixed(3)*100
-                  updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265
+                  energySourceDataCopy.datasets[0]["data"][j] = energySourceDataCopy.datasets[0]["data"][j].toFixed(4)*100
+                  updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265/100
                 }
                 this.setState({city_energy_cost: updated_cost.toFixed(2)})
                 this.setState({current_source: Object.assign({}, this.state.energy_data_details[elem[0]["_index"]])});
@@ -1428,14 +1432,14 @@ renderSection2EnergySources() {
           </div>
     <div className="row">
       <div style={styles.universal.grey_box}>
-        Hover over the energy sources in this graph to learn the facts about each source. Click on a source to increase it.
+       Hover over the energy sources in this graph to learn the facts about each source. Click on a source to increase it.
       </div>
     </div>
   </span>
   <span className="col-sm-8 ">
 
     <div style={styles.universal.mediumFont}>
-      Find a way to save money! Click on a section of the graph to use more of that energy source and see how it affects your Total Savings. 
+       Is it possible to save your city $5M per month simply by adjusting its energy portfolio? <div style={styles.universal.smallFont}>Click on a section of the graph to use more of that energy source and see how it affects your Total Savings. </div>
     </div>         
     <div style={{fontSize: Metric.font.size.large, fontWeight: Metric.font.weight.bold}}>Monthly Energy Consumption:</div>
     <div style={{fontSize: Metric.font.size.medium, fontWeight: Metric.font.weight.regular}}>
@@ -1505,7 +1509,7 @@ renderSection2EnergySources() {
     return (
       <ProgressBarContainer section="section2DoughnutEco" progress="city">
         <div style={styles.universal.sectionHeadlineSub}>
-          My City's Energy Sources: Financial Breakdown
+          $5M Energy Challenge: Round 2
         </div>
         <HorizontalLine section />
         <div className="row ">
@@ -1533,8 +1537,8 @@ renderSection2EnergySources() {
                       
                       energySourceDataCopy.datasets[0]["data"][j] = energySourceDataCopy.datasets[0]["data"][j].toFixed(3)*100
 
-                      updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265
-                      updated_co2 +=this.state.co[j]*energySourceDataCopy.datasets[0]["data"][j]*265
+                      updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265/100
+                      updated_co2 +=this.state.co[j]*energySourceDataCopy.datasets[0]["data"][j]*265/100
                     }
                   this.setState({
                     city_energy_cost: updated_cost.toFixed(2),
@@ -1554,7 +1558,7 @@ renderSection2EnergySources() {
             </div>
           </span>
           <span className="col-sm-8">
-            <div style={{fontSize: Metric.font.size.large, fontWeight: Metric.font.weight.bold}}>Monthy Energy Consumption:</div>
+            <div style={{fontSize: Metric.font.size.large, fontWeight: Metric.font.weight.bold}}>Can you save your city $5M AND save 50,000 tons of CO<sub>2</sub> from being emitted?</div>
             <div style={{fontSize: Metric.font.size.medium, fontWeight: Metric.font.weight.regular}}>
               City Budget: ${ this.state.city_energy_budget }M
               | Total Cost: ${ this.state.city_energy_cost }M
@@ -1565,7 +1569,7 @@ renderSection2EnergySources() {
               </div>
 
               <p style={(this.state.total_co2 - this.state.original_co2) >=0 ?  styles.universal.smallFont_negative : styles.universal.smallFont_positive}>
-                New CO<sub>2</sub> Contributions: {(this.state.total_co2 - this.state.original_co2).toFixed(2)} Tons
+                Additional CO<sub>2</sub>: {(this.state.total_co2 - this.state.original_co2).toFixed(2)} Tons
               </p>
 
               <div style={this.state.shouldHide ? {display: 'none'} : {
@@ -1607,9 +1611,19 @@ renderSection2EnergySources() {
                     <br/>
                   </p>
                 </span>
+
+
+                
             </div>
+
+   CO<sub>2</sub> emissions: {this.state.current_source["co"]} g/KWH
+
+
           </div>
+
+
         </div>
+
       </span>
     </div>
     <ContinueButton href="#section3Comparison" />
