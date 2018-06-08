@@ -1334,17 +1334,16 @@ renderSection2EnergySources() {
 
         <div className="row h-40">
           <span className="col-sm-4">
-            <QuizButton href="#section2Quiz" text="Increase wind  by 50% (reducing everything else)"/>
+            <QuizButton href="#section2Doughnut" text="Increase wind  by 50% (reducing everything else)"/>
           </span>
           <span className="col-sm-4">
-            <QuizButton href="#section2Quiz" text="Increase Coal by 50%, (reducing everything else) "/>
+            <QuizButton href="#section2Doughnut" text="Increase Coal by 50%, (reducing everything else) "/>
           </span>
           <span className="col-sm-4">
-            <QuizButton href="#section2Quiz" text="Increase Nuclear by 50%" />
+            <QuizButton href="#section2Doughnut" text="Increase Nuclear by 50%" />
           </span >
         </div>
 
-        <ContinueButton href="#section2Doughnut" />
       </ProgressBarContainer>
     );
   }
