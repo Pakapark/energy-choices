@@ -180,7 +180,7 @@ class Main extends Component {
 
         data1: {
           labels: [
-            'New England',
+            'New York',
             'East North Central',
             'West North Central',
             'South Atlantic',
@@ -199,7 +199,7 @@ class Main extends Component {
             hoverBackgroundColor: 'rgba(255,99,132,0.4)',
             hoverBorderColor: 'rgba(255,99,132,1)',
             data: [
-              (14.31/12*100), (33.36/12*100),
+              (50.7), (33.36/12*100),
               (31.88/12*100),
               (14.54/12*100),
               (46.09/12*100),
