@@ -264,17 +264,29 @@ class Main extends Component {
     this.washingMachineQuantityOnChange = this.washingMachineQuantityOnChange.bind(this);
     this.washingMachineWaterOnChange = this.washingMachineWaterOnChange.bind(this);
     this.carMileOnChange = this.carMileOnChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+
   }
 
   componentDidMount() {
     this.timer = setInterval(
-      () => this.increment(),
+      () => {this.increment() 
+
+        var energySourceDataCopy = this.state.energy_source_data_or;
+    
+        console.log('this is:', this.state.energy_source_data_or);
+    
+        this.setState({energy_source_data: Object.assign({}, energySourceDataCopy), piechart_update: true});
+
+      },
       500
     )
+
 
     this.addDoughnutHover("section2Doughnut");
     this.addDoughnutHover("section2DoughnutEco");
     this.addDoughnutHover("section2EnergySources");
+
 
   }
 
@@ -1409,8 +1421,10 @@ class Main extends Component {
 
 
 handleClick() {
-  var energySourceDataCopy = this.state.energy_source_data_or
+    var energySourceDataCopy = this.state.energy_source_data_or
+    
     console.log('this is:', this.state.energy_source_data_or);
+    
     this.setState({energy_source_data: Object.assign({}, energySourceDataCopy)});
 
 
@@ -1461,10 +1475,11 @@ handleClick() {
             <div style={styles.universal.grey_box}>
              Hover over the energy sources in this graph to learn the facts about each source. Click on a source to increase it.
 
-      <button onClick={(e) => this.handleClick(e)}>
-Reset      </button>
+                  <button onClick={this.handleClick}>
+                    Reset      
 
-                  <Quiz2Button onClick={(e) => this.handleClick(e)} text="reset" />
+                </button>
+
 
 
 
