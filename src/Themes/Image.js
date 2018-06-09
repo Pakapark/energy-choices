@@ -2,6 +2,7 @@ const Image = {
   lightbulb: {
     tiny: "../images/lightbulb-tiny.svg",
     small: "../images/lightbulb-small.svg",
+    smallMedium: "../images/lightbulb-small-medium.svg",
     medium: "../images/lightbulb-medium.svg"
   },
   whiteLightbulb: {
@@ -9,10 +10,12 @@ const Image = {
     small: "../images/white-lightbulb-small.svg"
   },
   greenLightbulb: {
-    small: "../images/green-lightbulb-small.svg"
+    small: "../images/green-lightbulb-small.svg",
+    medium: "../images/green-lightbulb-medium.svg"
   },
   redLightbulb: {
-    small: "../images/red-lightbulb-small.svg"
+    small: "../images/red-lightbulb-small.svg",
+    medium: "../images/red-lightbulb-medium.svg"
   },
   progressBar: {
     home: "../images/progress-bar-home.svg",

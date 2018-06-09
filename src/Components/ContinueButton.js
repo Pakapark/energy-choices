@@ -27,7 +27,10 @@ class ContinueButton extends Component {
 
   render() {
     return (
-      <div style={styles.continueButtonContainer}>
+      <div style={{
+        display: "block",
+        margin: this.props.margin ? this.props.margin : Metric.continueButtonContainer.margin
+      }}>
         {this.renderNarration()}
         <div style={styles.buttonContainer}>
           <a href={this.props.href}>

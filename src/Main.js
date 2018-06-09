@@ -40,11 +40,11 @@ const NEIGHBOUR = {
   LAPTOP: 720,
   TELEVISION: 1080,
   WASHING_MACHINE: 775,
-  DRYING_MACHINE: 1400,
-  AIR_CONDITIONER: 20101,
+  DRYING_MACHINE: 2500,
+  AIR_CONDITIONER: 50253,
   HEATER: 30000,
   CAR: 19320,
-  TOTAL: 75856
+  TOTAL: 76008
 }
 
 class Main extends Component {
@@ -58,12 +58,12 @@ class Main extends Component {
 
       zipcode: "",
 
-      lightbulbQuantity: 20,
+      lightbulbQuantity: 4,
       lightbulbDuration: 5,
       lightbulbEnergy: 3000,
 
       dryingMachineQuantity: 25,
-      dryingMachineEnergy: 1400,
+      dryingMachineEnergy: 2500,
 
       laptopQuantity: 3,
       laptopDuration: 8,
@@ -71,7 +71,7 @@ class Main extends Component {
 
       airConditionerDuration: 10,
       airConditionerTemperature: 68,
-      airConditionerEnergy: 20101,
+      airConditionerEnergy: 50253,
 
       televisionQuantity: 2,
       televisionDuration: 6,
@@ -90,7 +90,7 @@ class Main extends Component {
       carMile: 28,
       carEnergy: 19320,
 
-      totalHouseEnergy: 75856,
+      totalHouseEnergy: 76008,
 
       city_energy_budget: 26.25,
       city_energy_cost: 26.25,
@@ -125,7 +125,7 @@ class Main extends Component {
         }, {
           Name: "Hydropower, Biomass, Geothermal",
           Advantages: " - Domestic source of energy \n - Affordability \n - Cleaner than fossil fuels \n Renewable" ,
-          Disadvantages: "Geothermal: Location Specific \n Hydropower plants can be impacted by drought \n Hydropower can impact water quality and flow  \n Land used for energy crops maybe in demand for other purposes, such as faming, conservation, housing",
+          Disadvantages: "Geothermal: Location Specific \n Hydropower plants can be impacted \nby drought \n Hydropower can impact water quality\n and flow  \n Land used for energy crops maybe in demand for other purposes, such as faming, conservation, housing",
           cost_per_kwh: "0.11",
           c_cost: "0.08",
           o_cost: "0.03",
@@ -229,7 +229,7 @@ class Main extends Component {
               (18.1),
               (4.4),
             ]
-          }, 
+          },
 
 
 
@@ -270,12 +270,12 @@ class Main extends Component {
 
   componentDidMount() {
     this.timer = setInterval(
-      () => {this.increment() 
+      () => {this.increment()
 
         var energySourceDataCopy = this.state.energy_source_data_or;
-    
+
         console.log('this is:', this.state.energy_source_data_or);
-    
+
         this.setState({energy_source_data: Object.assign({}, energySourceDataCopy), piechart_update: true});
 
       },
@@ -309,7 +309,7 @@ class Main extends Component {
   addDoughnutHover(donutRef) {
     var doughnut = this.refs[donutRef].chartInstance;
     doughnut.options.hover.onHover = this.mouseoverWrapper(doughnut);
-    doughnut.options.events = ["touchstart", "click"] 
+    doughnut.options.events = ["touchstart", "click"]
     doughnut.options.tooltips.titleFontSize =50
     doughnut.options.tooltips.bodyFontSize =30
 
@@ -321,7 +321,7 @@ class Main extends Component {
   }
 
   lightbulbQuantityOnChange(event) {
-    var newLightBulbEnergy = event.target.value * this.state.lightbulbDuration * DAYS_IN_MONTH;
+    var newLightBulbEnergy = event.target.value * this.state.lightbulbDuration * DAYS_IN_MONTH *5;
     this.setState({
       lightbulbQuantity: event.target.value,
       lightbulbEnergy: newLightBulbEnergy,
@@ -330,7 +330,7 @@ class Main extends Component {
   }
 
   lightbulbDurationOnChange(event) {
-    var newLightBulbEnergy = event.target.value * this.state.lightbulbQuantity * DAYS_IN_MONTH;
+    var newLightBulbEnergy = event.target.value * this.state.lightbulbQuantity * DAYS_IN_MONTH*5;
     this.setState({
       lightbulbDuration: event.target.value,
       lightbulbEnergy: newLightBulbEnergy,
@@ -339,7 +339,7 @@ class Main extends Component {
   }
 
   dryingMachineQuantityOnChange(event) {
-    var newDryingMachineEnergy = event.target.value * DRYING_MACHINE_COST;
+    var newDryingMachineEnergy = event.target.value * 100;
     this.setState({
       dryingMachineQuantity: event.target.value,
       dryingMachineEnergy: newDryingMachineEnergy,
@@ -366,7 +366,7 @@ class Main extends Component {
   }
 
   airConditionerTemperatureOnChange(event) {
-    var newAirConditionerEnergy = parseInt(Math.pow(1.05, 74 - event.target.value) * AC_CONSTANT * this.state.airConditionerDuration * DAYS_IN_MONTH, 10);
+    var newAirConditionerEnergy = parseInt(5/3*Math.pow(1.05, 74 - event.target.value) * AC_CONSTANT * this.state.airConditionerDuration * DAYS_IN_MONTH, 10);
     this.setState({
       airConditionerTemperature: event.target.value,
       airConditionerEnergy: newAirConditionerEnergy,
@@ -375,7 +375,7 @@ class Main extends Component {
   }
 
   airConditionerDurationOnChange(event) {
-    var newAirConditionerEnergy = parseInt(Math.pow(1.05, 74 - this.state.airConditionerTemperature) * AC_CONSTANT * event.target.value * DAYS_IN_MONTH, 10);
+    var newAirConditionerEnergy = parseInt(5/3*Math.pow(1.05, 74 - this.state.airConditionerTemperature) * AC_CONSTANT * event.target.value * DAYS_IN_MONTH, 10);
     this.setState({
       airConditionerDuration: event.target.value,
       airConditionerEnergy: newAirConditionerEnergy,
@@ -523,9 +523,9 @@ class Main extends Component {
     return (
       <div style={styles.section1Utility.utilityContainer} className="row">
         <span className="col-sm-9" style={{padding: "5px 10px"}}>
-          <div style={styles.section1Utility.utilityHeader}>Lightbulb</div>
+          <div style={styles.section1Utility.utilityHeader}>Light</div>
           <div style={styles.section1Utility.utilitySliderContainer}>
-            <div style={styles.section1Utility.utilityFactor}>Quantity</div>
+            <div style={styles.section1Utility.utilityFactor}>Room</div>
             <div>
               <input
                 style={styles.section1Utility.inputRange}
@@ -535,7 +535,7 @@ class Main extends Component {
                 onChange={this.lightbulbQuantityOnChange}
               />
             </div>
-            <div>&nbsp; {this.state.lightbulbQuantity} lightbulbs</div>
+            <div>&nbsp; {this.state.lightbulbQuantity} rooms</div>
           </div>
           <div style={styles.section1Utility.utilitySliderContainer}>
             <div style={styles.section1Utility.utilityFactor}>Duration</div>
@@ -570,7 +570,7 @@ class Main extends Component {
     return (
       <div style={styles.section1Utility.utilityContainer} className="row">
         <span className="col-sm-9" style={{padding: "5px 10px"}}>
-          <div style={styles.section1Utility.utilityHeader}>Dryer</div>
+          <div style={styles.section1Utility.utilityHeader}>Laundry</div>
           <div style={styles.section1Utility.utilitySliderContainer}>
             <div style={styles.section1Utility.utilityFactor}>Quantity</div>
             <div>
@@ -592,7 +592,7 @@ class Main extends Component {
             {this.state.dryingMachineEnergy} <img alt=""src={Image.whiteLightbulb.small} />
           </div>
           <div style={styles.section1Utility.utilityEnergyInform}>
-            (56 <img alt=""src={Image.whiteLightbulb.tiny} /> per laundry load)
+            (100 <img alt=""src={Image.whiteLightbulb.tiny} /> per laundry load)
           </div>
         </span>
       </div>
@@ -946,7 +946,7 @@ class Main extends Component {
         <HorizontalLine section />
         <div style={styles.universal.mediumFont}>
           We'll start by exploring the energy choices you make in your own home.
-        </div>        
+        </div>
 
         <div style={styles.universal.mediumFont}>
           Please fill in your zip code for a personalized experience
@@ -963,8 +963,8 @@ class Main extends Component {
         </div>
 
         <div style={styles.universal.smallFont}>
-          Your house will start with the average energy use for your area. You can then change the sliders to reflect your own habits. 
-        </div>        
+          Your house will start with the average energy use for your area. You can then change the sliders to reflect your own habits.
+        </div>
         <div style={{visibility: this.state.zipcode.length > 4 ? "visible": "hidden"}}>
           <div style={styles.universal.mediumFont}>Did You Know That</div>
           <div style={styles.universal.smallFont}>On average, a single family house in your area uses energy</div>
@@ -993,10 +993,6 @@ class Main extends Component {
         </div>
         <div style={styles.section1Utility.utilityRow}>
           {this.renderTelevision()}
-          {this.renderHeater()}
-        </div>
-        <div style={styles.section1Utility.utilityRow}>
-          {this.renderWashingMachine()}
           {this.renderCar()}
         </div>
         <div style={styles.section1Utility.totalEnergy}>
@@ -1019,119 +1015,48 @@ class Main extends Component {
           <thead>
             <tr style={styles.universal.mediumFont}>
               <td style={{paddingBottom: "15px", textAlign: "left", paddingLeft: "50px"}}>Utilities</td>
-              <td style={{paddingBottom: "15px"}}>Your House</td>
-              <td style={{paddingBottom: "15px"}}>Your Neighbours</td>
-              <td style={{paddingBottom: "15px"}}>Result</td>
+              <td style={{paddingBottom: "15px"}}>Your House (<img alt="" src={Image.lightbulb.smallMedium}/>)</td>
+              <td style={{paddingBottom: "15px"}}>Your Neighbours (<img alt="" src={Image.lightbulb.smallMedium}/>)</td>
             </tr>
           </thead>
           <tbody>
             <tr style={styles.universal.smallFont}>
-              <td style={{paddingBottom: "10px", textAlign: "left", paddingLeft: "50px"}}>Lightbulb</td>
-              <td style={{paddingBottom: "10px"}}>{this.state.lightbulbEnergy} <img alt=""src={Image.lightbulb.small} /></td>
-              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.LIGHTBULB}&nbsp;<img alt=""src={Image.lightbulb.small} /></td>
-              <td
-                style={{
-                  paddingBottom: "10px",
-                  color: this.state.lightbulbEnergy <= NEIGHBOUR.LIGHTBULB ? Color.green : Color.red
-                }}>
-                {this.state.lightbulbEnergy <= NEIGHBOUR.LIGHTBULB ? "Less Than Average" : "More Than Average"}
-              </td>
+              <td style={{paddingBottom: "10px", textAlign: "left", paddingLeft: "50px"}}>Light</td>
+              <td style={{
+                paddingBottom: "10px",
+                color: this.state.lightbulbEnergy <= NEIGHBOUR.LIGHTBULB ? Color.green : Color.red
+              }}>{this.state.lightbulbEnergy} </td>
+              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.LIGHTBULB}&nbsp;</td>
             </tr>
             <tr style={styles.universal.smallFont}>
               <td style={{paddingBottom: "10px", textAlign: "left", paddingLeft: "50px"}}>Laptop</td>
-              <td style={{paddingBottom: "10px"}}>{this.state.laptopEnergy} <img alt=""src={Image.lightbulb.small} /></td>
-              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.LAPTOP}&nbsp;<img alt=""src={Image.lightbulb.small} /></td>
-              <td
-                style={{
-                  paddingBottom: "10px",
-                  color: this.state.laptopEnergy <= NEIGHBOUR.LAPTOP ? Color.green : Color.red
-                }}>
-                {this.state.laptopEnergy <= NEIGHBOUR.LAPTOP ? "Less Than Average" : "More Than Average"}
-              </td>
+              <td style={{paddingBottom: "10px", color: this.state.laptopEnergy <= NEIGHBOUR.LAPTOP ? Color.green : Color.red}}>{this.state.laptopEnergy}</td>
+              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.LAPTOP}&nbsp;</td>
             </tr>
             <tr style={styles.universal.smallFont}>
               <td style={{paddingBottom: "10px", textAlign: "left", paddingLeft: "50px"}}>Television</td>
-              <td style={{paddingBottom: "10px"}}>{this.state.televisionEnergy} <img alt=""src={Image.lightbulb.small} /></td>
-              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.TELEVISION}&nbsp;<img alt=""src={Image.lightbulb.small} /></td>
-              <td
-                style={{
-                  paddingBottom: "10px",
-                  color: this.state.televisionEnergy <= NEIGHBOUR.TELEVISION ? Color.green : Color.red
-                }}>
-                {this.state.televisionEnergy <= NEIGHBOUR.TELEVISION ? "Less Than Average" : "More Than Average"}
-              </td>
+              <td style={{paddingBottom: "10px", color: this.state.televisionEnergy <= NEIGHBOUR.TELEVISION ? Color.green : Color.red}}>{this.state.televisionEnergy}</td>
+              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.TELEVISION}&nbsp;</td>
             </tr>
             <tr style={styles.universal.smallFont}>
-              <td style={{paddingBottom: "10px", textAlign: "left", paddingLeft: "50px"}}>Washing Machine</td>
-              <td style={{paddingBottom: "10px"}}>{this.state.washingMachineEnergy} <img alt=""src={Image.lightbulb.small} /></td>
-              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.WASHING_MACHINE}&nbsp;<img alt=""src={Image.lightbulb.small} /></td>
-              <td
-                style={{
-                  paddingBottom: "10px",
-                  color: this.state.washingMachineEnergy <= NEIGHBOUR.WASHING_MACHINE ? Color.green : Color.red
-                }}>
-                {this.state.washingMachineEnergy <= NEIGHBOUR.WASHING_MACHINE ? "Less Than Average" : "More Than Average"}
-              </td>
-            </tr>
-            <tr style={styles.universal.smallFont}>
-              <td style={{paddingBottom: "10px", textAlign: "left", paddingLeft: "50px"}}>Dryer</td>
-              <td style={{paddingBottom: "10px"}}>{this.state.dryingMachineEnergy} <img alt=""src={Image.lightbulb.small} /></td>
-              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.DRYING_MACHINE}&nbsp;<img alt=""src={Image.lightbulb.small} /></td>
-              <td
-                style={{
-                  paddingBottom: "10px",
-                  color: this.state.dryingMachineEnergy <= NEIGHBOUR.DRYING_MACHINE ? Color.green : Color.red
-                }}>
-                {this.state.dryingMachineEnergy <= NEIGHBOUR.DRYING_MACHINE ? "Less Than Average" : "More Than Average"}
-              </td>
+              <td style={{paddingBottom: "10px", textAlign: "left", paddingLeft: "50px"}}>Laundry</td>
+              <td style={{paddingBottom: "10px", color: this.state.dryingMachineEnergy <= NEIGHBOUR.DRYING_MACHINE ? Color.green : Color.red}}>{this.state.dryingMachineEnergy} </td>
+              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.DRYING_MACHINE}&nbsp;</td>
             </tr>
             <tr style={styles.universal.smallFont}>
               <td style={{paddingBottom: "10px", textAlign: "left", paddingLeft: "50px"}}>Air Conditioner</td>
-              <td style={{paddingBottom: "10px"}}>{this.state.airConditionerEnergy} <img alt=""src={Image.lightbulb.small} /></td>
-              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.AIR_CONDITIONER}&nbsp;<img alt=""src={Image.lightbulb.small} /></td>
-              <td
-                style={{
-                  paddingBottom: "10px",
-                  color: this.state.airConditionerEnergy <= NEIGHBOUR.AIR_CONDITIONER ? Color.green : Color.red
-                }}>
-                {this.state.airConditionerEnergy <= NEIGHBOUR.AIR_CONDITIONER ? "Less Than Average" : "More Than Average"}
-              </td>
-            </tr>
-            <tr style={styles.universal.smallFont}>
-              <td style={{paddingBottom: "10px", textAlign: "left", paddingLeft: "50px"}}>Heater</td>
-              <td style={{paddingBottom: "10px"}}>{this.state.heaterEnergy} <img alt=""src={Image.lightbulb.small} /></td>
-              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.HEATER}&nbsp;<img alt=""src={Image.lightbulb.small} /></td>
-              <td
-                style={{
-                  paddingBottom: "10px",
-                  color: this.state.heaterEnergy <= NEIGHBOUR.HEATER ? Color.green : Color.red
-                }}>
-                {this.state.heaterEnergy <= NEIGHBOUR.HEATER ? "Less Than Average" : "More Than Average"}
-              </td>
+              <td style={{paddingBottom: "10px", color: this.state.airConditionerEnergy <= NEIGHBOUR.AIR_CONDITIONER ? Color.green : Color.red}}>{this.state.airConditionerEnergy} </td>
+              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.AIR_CONDITIONER}&nbsp;</td>
             </tr>
             <tr style={styles.universal.smallFont}>
               <td style={{paddingBottom: "10px", textAlign: "left", paddingLeft: "50px"}}>Car</td>
-              <td style={{paddingBottom: "10px"}}>{this.state.carEnergy} <img alt=""src={Image.lightbulb.small} /></td>
-              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.CAR} <img alt=""src={Image.lightbulb.small} /></td>
-              <td
-                style={{
-                  paddingBottom: "10px",
-                  color: this.state.carEnergy <= NEIGHBOUR.CAR ? Color.green : Color.red
-                }}>
-                {this.state.carEnergy <= NEIGHBOUR.CAR ? "Less Than Average" : "More Than Average"}
-              </td>
+              <td style={{paddingBottom: "10px", color: this.state.carEnergy <= NEIGHBOUR.CAR ? Color.green : Color.red}}>{this.state.carEnergy} </td>
+              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.CAR}</td>
             </tr>
             <tr style={styles.universal.mediumFont}>
               <td style={{paddingBottom: "10px", textAlign: "left", paddingLeft: "50px"}}>Total Energy</td>
-              <td style={{paddingBottom: "10px"}}>{this.state.totalHouseEnergy} <img alt=""src={Image.lightbulb.medium} /></td>
-              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.TOTAL}&nbsp;<img alt=""src={Image.lightbulb.medium} /></td>
-              <td
-                style={{
-                  paddingBottom: "10px",
-                  color: this.state.totalHouseEnergy <= NEIGHBOUR.TOTAL ? Color.green : Color.red
-                }}>
-                {this.state.totalHouseEnergy <= NEIGHBOUR.TOTAL ? "Less Than Average" : "More Than Average"}
-              </td>
+              <td style={{paddingBottom: "10px", color: this.state.totalHouseEnergy <= NEIGHBOUR.TOTAL ? Color.green : Color.red}}>{this.state.totalHouseEnergy} </td>
+              <td style={{paddingBottom: "10px"}}>{NEIGHBOUR.TOTAL}&nbsp;</td>
             </tr>
           </tbody>
         </table>
@@ -1147,9 +1072,9 @@ class Main extends Component {
           Energy Saving Tips
         </div>
         <HorizontalLine section />
-        <div style={styles.universal.mediumFont}>
-          Would you like to save by reducing your energy consumption? Here are some tips to get started.
-        </div>     
+        <div style={{fontSize: Metric.font.size.large, fontWeight: Metric.font.weight.medium}}>
+          Would you like to save by reducing your energy consumption? <br />Here are some tips to get started.
+        </div>
         <div style={{fontSize: Metric.font.size.small, fontWeight: Metric.font.weight.medium, color: Color.red, padding: "5px 0"}}>
           Focus your improvements on the red areas.
         </div>
@@ -1180,11 +1105,11 @@ class Main extends Component {
             borderShadow: "2px",
             padding: "5px 10px"
           }}>
-            <div style={styles.section1Suggestion.utilityHeader}>Dryer</div>
+            <div style={styles.section1Suggestion.utilityHeader}>Laundry</div>
             <div style={styles.section1Suggestion.utilitySliderContainer}>
               <ol>
+                <li>Wash laundry with <b>cold water can save up to 30% of energy use</b></li>
                 <li>The best way to save energy with your dryer is <b>not to use it</b>. If the weather outside is <b>dry, sunny and windy</b>, You should <b>hang out your clothes outside instead of using a dryer</b>.</li>
-                <li>Use your dryer with a full load of laundry</li>
               </ol>
             </div>
           </div>
@@ -1249,42 +1174,6 @@ class Main extends Component {
             width: "45%",
             height: "150px",
             textAlign: "left",
-            border: "2px solid " + ( this.state.heaterEnergy <= NEIGHBOUR.HEATER ? Color.green : Color.red ),
-            borderRadius: "3px",
-            borderShadow: "2px",
-            padding: "5px 10px"
-          }}>
-            <div style={styles.section1Suggestion.utilityHeader}>Heater</div>
-            <div style={styles.section1Suggestion.utilitySliderContainer}>
-              <ol>
-                <li><b>Use a Programmable Thermostat</b> to optimize the energy usage. This can save up 15% of your normal energy.</li>
-                <li>Use a heater for a small part of your house instead of heating up the entire house.</li>
-              </ol>
-            </div>
-          </div>
-        </div>
-        <div style={styles.section1Suggestion.utilityRow}>
-          <div style={{
-            width: "45%",
-            height: "150px",
-            textAlign: "left",
-            border: "2px solid " + ( this.state.washingMachineEnergy <= NEIGHBOUR.WASHING_MACHINE ? Color.green : Color.red ),
-            borderRadius: "3px",
-            borderShadow: "2px",
-            padding: "5px 10px"
-          }}>
-            <div style={styles.section1Suggestion.utilityHeader}>Washing Machine</div>
-            <div style={styles.section1Suggestion.utilitySliderContainer}>
-              <ol>
-                <li>You can save a lot of energy by <b>simply washing your clothes in cold water</b>, which is a perfectly efficient way to clean most clothes. </li>
-                <li>Use your washing machine with a full load of laundry</li>
-              </ol>
-            </div>
-          </div>
-          <div style={{
-            width: "45%",
-            height: "150px",
-            textAlign: "left",
             border: "2px solid " + ( this.state.carEnergy <= NEIGHBOUR.CAR ? Color.green : Color.red ),
             borderRadius: "3px",
             borderShadow: "2px",
@@ -1299,6 +1188,7 @@ class Main extends Component {
               </ol>
             </div>
           </div>
+
         </div>
         <ContinueButton href="#section2Introduction" />
       </ProgressBarContainer>
@@ -1355,7 +1245,7 @@ class Main extends Component {
 
         <div className="row ">
             <Bar height="90px" data={this.state.data1} />
-          
+
         </div>
 
         <ContinueButton href="#section2EnergySources" />
@@ -1372,18 +1262,18 @@ class Main extends Component {
         </div>
         <HorizontalLine section />
 
-        
+
         <div style={styles.universal.largeFont_reg}>
           Let's explore the percentage breakdown for energy sources in your city:
         </div>
-        
+
         <Doughnut height="90px" data={this.state.energy_source_data} ref='section2EnergySources'/>
 
         <div style={{fontSize: Metric.font.size.smallFont, fontWeight: Metric.font.weight.medium, textAlign: "center"}}>
         <br/>
           Hover over each slice to see  the percentage of the 4.4 Billion <img alt=""src={Image.lightbulb.small}/> generated by that energy source.
         </div>
-        
+
 
         <ContinueButton href="#section2Quiz2" />
       </ProgressBarContainer>
@@ -1422,9 +1312,9 @@ class Main extends Component {
 
 handleClick() {
     var energySourceDataCopy = this.state.energy_source_data_or
-    
+
     console.log('this is:', this.state.energy_source_data_or);
-    
+
     this.setState({energy_source_data: Object.assign({}, energySourceDataCopy)});
 
 
@@ -1474,24 +1364,20 @@ handleClick() {
           <div className="row">
             <div style={styles.universal.grey_box}>
              Hover over the energy sources in this graph to learn the facts about each source. Click on a source to increase it.
-
-
-
-
             </div>
           </div>
         </span>
         <span className="col-sm-8 ">
 
-    <div style={styles.universal.mediumFont}>
+    <div style={{fontSize: Metric.font.size.large, fontWeight: Metric.font.weight.medium}}>
        Is it possible to save your city $5M per month simply by adjusting its energy portfolio?
-       <div style={styles.universal.smallFont}>Click on a section of the graph to use more of that energy source and see how it affects your Total Savings. </div>
-    </div>         
+       <div style={{fontSize: Metric.font.size.medium, fontWeight: Metric.font.weight.regular, margin: "10px 0"}}>Click on a section of the graph to use more of that energy source and see how it affects your Total Savings. </div>
+    </div>
     <div style={{fontSize: Metric.font.size.large, fontWeight: Metric.font.weight.bold}}>Monthly Energy Consumption:</div>
     <div style={{fontSize: Metric.font.size.medium, fontWeight: Metric.font.weight.regular}}>
       City Budget: ${ this.state.city_energy_budget }M
       | Total Cost: ${ this.state.city_energy_cost }M
-      <div style={styles.universal.smallFont}> Total Savings:
+      <div style={{fontSize: Metric.font.size.medium, fontWeight: Metric.font.weight.regular, margin: "10px 0"}}> Total Savings:
         <p style={this.state.city_energy_budget - this.state.city_energy_cost >=0 ? styles.universal.smallFont_positive : styles.universal.smallFont_negative}> ${ (this.state.city_energy_budget - this.state.city_energy_cost).toFixed(2) }M
         </p></div>
 
@@ -1543,8 +1429,8 @@ handleClick() {
           What happens when we factor environmental impacts into the energy decisions for our city?
         </div>
         <img alt="" src={Image.city.city_full} />
-        <div style={styles.universal.mediumFont}>
-            Energy sources can contribute harmful emissions in different ways, but most notably, Carbon Dioxide (CO<sub>2</sub>). Most of your city's residents want low cost energy, but do not want a new power plant in their back yards. Let's explore the cost/benefit trade-offs of energy sources in the context of financials and CO<sub>2</sub> emissions.
+        <div style={styles.universal.smallFont}>
+            Energy sources can contribute harmful emissions in different ways, but most notably, <b>Carbon Dioxide (CO<sub>2</sub>)</b>. Most of your city's residents want <b>low cost energy</b>, but <b>do not want a new power plant</b> in their back yards. <br /><br />Let's explore the cost/benefit trade-offs of energy sources in the context of financials and CO<sub>2</sub> emissions.
         </div>
         <ContinueButton href="#section2DoughnutEco" />
       </ProgressBarContainer>
@@ -1581,7 +1467,7 @@ handleClick() {
 
                     for (var j = 0; j < energySourceDataCopy.datasets[0]["data"].length; j++) {
                       energySourceDataCopy.datasets[0]["data"][j]/= total;
-                      
+
                       energySourceDataCopy.datasets[0]["data"][j] = energySourceDataCopy.datasets[0]["data"][j].toFixed(3)*100
 
                       updated_cost+=this.state.cost_per_kwh[j]*energySourceDataCopy.datasets[0]["data"][j]*265/100
@@ -1624,7 +1510,7 @@ handleClick() {
                 fontWeight: Metric.font.weight.regular,
                 margin: "0 0",
                 backgroundColor: "#C9DAE1",
-                padding: "30px",
+                padding: "15px",
                 borderRadius: "25px"
               } }>
                 <p style={{fontSize: Metric.font.size.large, fontWeight: Metric.font.weight.regular, marginBottom: "0"}}> {this.state.current_source["Name"]} </p>
@@ -1662,7 +1548,7 @@ handleClick() {
                 </span>
 
 
-                
+
             </div>
 
    CO<sub>2</sub> emissions: {this.state.current_source["co"]} g/KWH
@@ -1718,7 +1604,7 @@ handleClick() {
   }
 
 
-  renderSection3Choices() { 
+  renderSection3Choices() {
     // Note: unused
       return (
       <ProgressBarContainer section="section3Choices" progress="world">
@@ -1835,7 +1721,7 @@ handleClick() {
       {this.renderSection1Suggestion()}
       {this.renderSection2Introduction()}
       {this.renderSection2Quiz()}
-      
+
       {this.renderSection2EnergySources()}
       {this.renderSection2Quiz2()}
       {this.renderSection2Doughnut()}
@@ -1872,7 +1758,7 @@ const styles = {
     smallFont_left: {
       fontSize: Metric.font.size.small,
       fontWeight: Metric.font.weight.regular,
-      margin: "30px 0",
+      margin: "15px 0",
       textAlign: "left",
     },
     mediumFont: {
@@ -1914,7 +1800,7 @@ const styles = {
       fontWeight: Metric.font.weight.regular,
       margin: "20px 0",
       backgroundColor: "#C9DAE1",
-      padding: "30px",
+      padding: "15px",
       borderRadius: "25px"
     },
   },
