@@ -178,6 +178,37 @@ class Main extends Component {
           }]
         },
 
+
+          energy_source_data_or: {
+          labels: [
+            'Nuclear',
+            'Coal',
+            'Natural Gas',
+            "Hydropower, Biomass, Geothermal",
+            'Solar',
+            'Wind',
+          ],
+          datasets: [{
+            data: [33.1, 19.5, 32.7, 10, .6, 4.1],
+            backgroundColor: [
+              '#E85349',
+              '#ED6472',
+              '#E58E97',
+              '#a8ccdb',
+              '#29ABC9',
+              '#218DA7',
+            ],
+            hoverBackgroundColor: [
+              '#c9473e',
+              '#ba4e59',
+              '#b57077',
+              '#9eacb2',
+              '#2088a0',
+              '#1a7084',
+            ]
+          }]
+        },
+
         data1: {
           labels: [
             'New York',
@@ -1377,7 +1408,13 @@ class Main extends Component {
   }
 
 
+handleClick() {
+  var energySourceDataCopy = this.state.energy_source_data_or
+    console.log('this is:', this.state.energy_source_data_or);
+    this.setState({energy_source_data: Object.assign({}, energySourceDataCopy)});
 
+
+  }
 
 
 
@@ -1423,6 +1460,14 @@ class Main extends Component {
           <div className="row">
             <div style={styles.universal.grey_box}>
              Hover over the energy sources in this graph to learn the facts about each source. Click on a source to increase it.
+
+      <button onClick={(e) => this.handleClick(e)}>
+Reset      </button>
+
+                  <Quiz2Button onClick={(e) => this.handleClick(e)} text="reset" />
+
+
+
             </div>
           </div>
         </span>
